@@ -147,8 +147,8 @@ export const Navbar: React.FC = () => {
 
             {user ? (
               <>
-                {/* Donate CTA button for Donors */}
-                {user.role === 'DONOR' && (
+                {/* Donate CTA button for All Users */}
+                {user && (
                   <Link
                     to="/donate"
                     className="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-md shadow-emerald-600/20 flex items-center gap-1.5 transition active:scale-95"

@@ -61,39 +61,7 @@ export const RegisterPage: React.FC = () => {
           <p className="text-xs text-slate-500">Join the ShareBite food rescue network</p>
         </div>
 
-        {/* Role Selector Tabs */}
-        <div className="space-y-1">
-          <label className="block text-xs font-semibold text-slate-700">Account Type</label>
-          <div className="grid grid-cols-3 gap-2 bg-slate-100 p-1 rounded-2xl">
-            <button
-              type="button"
-              onClick={() => setRole('DONOR')}
-              className={`py-2 text-xs font-bold rounded-xl transition ${
-                role === 'DONOR' ? 'bg-white text-emerald-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Donor
-            </button>
-            <button
-              type="button"
-              onClick={() => setRole('RECIPIENT')}
-              className={`py-2 text-xs font-bold rounded-xl transition ${
-                role === 'RECIPIENT' ? 'bg-white text-sky-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Recipient
-            </button>
-            <button
-              type="button"
-              onClick={() => setRole('VOLUNTEER')}
-              className={`py-2 text-xs font-bold rounded-xl transition ${
-                role === 'VOLUNTEER' ? 'bg-white text-purple-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Volunteer
-            </button>
-          </div>
-        </div>
+
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">

@@ -27,7 +27,7 @@ export const register = async (req: Request, res: Response) => {
         email: validated.email,
         passwordHash,
         phone: validated.phone || null,
-        role: validated.role,
+        role: validated.role || 'USER',
         city: validated.city || 'Bengaluru',
         latitude: validated.latitude || 12.9716,
         longitude: validated.longitude || 77.5946,

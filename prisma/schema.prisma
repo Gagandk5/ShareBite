@@ -14,7 +14,7 @@ model User {
   email        String    @unique
   passwordHash String
   phone        String?
-  role         String    // DONOR, RECIPIENT, VOLUNTEER, ADMIN
+  role         String    @default("USER")
   profileImage String?
   city         String?
   latitude     Float?
