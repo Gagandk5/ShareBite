@@ -86,6 +86,8 @@ export const DonationDetailsPage: React.FC = () => {
 
   const isDonor = user?.id === donation.donorId;
   const isAvailable = donation.status === 'AVAILABLE';
+  const hasRequested = donation.requests?.some((r) => r.recipientId === user?.id && r.status === 'PENDING');
+  const hasAcceptedRequest = donation.requests?.some((r) => r.recipientId === user?.id && r.status === 'ACCEPTED');
 
   // Request Submission by Recipient
   const handleRequestSubmit = async (e: React.FormEvent) => {
@@ -331,18 +333,49 @@ export const DonationDetailsPage: React.FC = () => {
             {/* Action Buttons Container */}
             <div className="space-y-3 pt-2">
               
-              {/* Request Food Surplus Button (Available to all users except creator) */}
-              {user && user.id !== donation.donorId && isAvailable && (
-                <button
-                  onClick={() => setRequestModalOpen(true)}
-                  className="w-full py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-2"
-                >
-                  <HeartHandshake className="w-5 h-5" />
-                  <span>Request Food Surplus</span>
-                </button>
+              {/* Guest CTA */}
+              {!user && (
+                <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-center space-y-2">
+                  <p className="text-xs font-bold text-amber-900">Want to request this food parcel?</p>
+                  <button
+                    onClick={() => navigate('/login')}
+                    className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md transition"
+                  >
+                    Log In or Register to Request Food
+                  </button>
+                </div>
               )}
 
-              {/* Accept Volunteer Delivery Route (Available to all users) */}
+              {/* Authenticated Member Actions (Not Creator) */}
+              {user && !isDonor && (
+                <>
+                  {hasRequested ? (
+                    <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-center text-xs font-bold flex items-center justify-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                      <span>Food Request Submitted (Pending Approval)</span>
+                    </div>
+                  ) : hasAcceptedRequest ? (
+                    <div className="p-4 rounded-2xl bg-teal-50 border border-teal-200 text-teal-900 text-center text-xs font-bold flex items-center justify-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-teal-600" />
+                      <span>Your Request Was Accepted! Coordinate Pickup Above</span>
+                    </div>
+                  ) : (['AVAILABLE', 'REQUESTED'].includes(donation.status)) ? (
+                    <button
+                      onClick={() => setRequestModalOpen(true)}
+                      className="w-full py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-2"
+                    >
+                      <HeartHandshake className="w-5 h-5" />
+                      <span>Request Food Surplus</span>
+                    </button>
+                  ) : (
+                    <div className="p-3 rounded-xl bg-slate-100 text-slate-600 text-center text-xs font-semibold">
+                      This food parcel is currently {donation.status.toLowerCase()}.
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Accept Volunteer Delivery Route */}
               {user && activeDelivery?.status === 'AVAILABLE' && (
                 <button
                   onClick={() => handleAcceptDelivery(activeDelivery.id)}
