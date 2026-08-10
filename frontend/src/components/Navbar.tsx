@@ -44,9 +44,11 @@ export const Navbar: React.FC = () => {
           
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition">
-              <UtensilsCrossed className="w-5 h-5" />
-            </div>
+            <img
+              src="/logo.png"
+              alt="ShareBite"
+              className="w-10 h-10 rounded-xl object-contain shadow-md shadow-emerald-500/20 group-hover:scale-105 transition"
+            />
             <div className="flex flex-col">
               <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-700 via-teal-700 to-slate-900 bg-clip-text text-transparent">
                 ShareBite
