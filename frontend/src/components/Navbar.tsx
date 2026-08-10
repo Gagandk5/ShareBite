@@ -186,8 +186,8 @@ export const Navbar: React.FC = () => {
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-200 py-1 z-50">
                       <div className="px-4 py-2 border-b border-slate-100">
                         <p className="text-xs font-bold text-slate-800 truncate">{user.name}</p>
-                        <span className="inline-block mt-0.5 text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 uppercase">
-                          {user.role}
+                        <span className="inline-block mt-0.5 text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">
+                          Member
                         </span>
                       </div>
                       <Link
@@ -275,17 +275,15 @@ export const Navbar: React.FC = () => {
                 onClick={() => setMobileMenuOpen(false)}
                 className="block py-2 text-sm font-semibold text-emerald-700"
               >
-                My Dashboard ({user.role})
+                My Dashboard
               </Link>
-              {user.role === 'DONOR' && (
-                <Link
-                  to="/donate"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block w-full text-center py-2.5 rounded-lg bg-emerald-600 text-white font-semibold text-sm"
-                >
-                  + Donate Food
-                </Link>
-              )}
+              <Link
+                to="/donate"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block w-full text-center py-2.5 rounded-lg bg-emerald-600 text-white font-semibold text-sm"
+              >
+                + Donate Food
+              </Link>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);

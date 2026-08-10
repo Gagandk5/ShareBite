@@ -102,7 +102,7 @@ export const CreateDonationPage: React.FC = () => {
         <div className="border-b border-slate-100 pb-6 space-y-1">
           <div className="flex items-center gap-2 text-emerald-600 font-bold text-xs uppercase tracking-wider">
             <PlusCircle className="w-4 h-4" />
-            <span>Food Donor Listing Portal</span>
+            <span>Food Surplus Listing Portal</span>
           </div>
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Donate Surplus Food</h1>
           <p className="text-xs text-slate-500">Provide accurate food details to facilitate fast and safe rescue operations.</p>
