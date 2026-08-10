@@ -41,8 +41,8 @@ export const acceptDelivery = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
 
-    if (!req.user || (req.user.role !== 'VOLUNTEER' && req.user.role !== 'ADMIN')) {
-      return res.status(403).json({ error: 'Only registered Volunteers can accept delivery tasks.' });
+    if (!req.user) {
+      return res.status(401).json({ error: 'Authentication required to accept delivery routes.' });
     }
 
     const delivery = await prisma.delivery.findUnique({

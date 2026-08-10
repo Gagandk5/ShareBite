@@ -331,8 +331,8 @@ export const DonationDetailsPage: React.FC = () => {
             {/* Action Buttons Container */}
             <div className="space-y-3 pt-2">
               
-              {/* Case 1: Recipient Requests Food */}
-              {user?.role === 'RECIPIENT' && isAvailable && (
+              {/* Request Food Surplus Button (Available to all users except creator) */}
+              {user && user.id !== donation.donorId && isAvailable && (
                 <button
                   onClick={() => setRequestModalOpen(true)}
                   className="w-full py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-2"
@@ -342,8 +342,8 @@ export const DonationDetailsPage: React.FC = () => {
                 </button>
               )}
 
-              {/* Case 2: Volunteer Accepts Delivery */}
-              {user?.role === 'VOLUNTEER' && activeDelivery?.status === 'AVAILABLE' && (
+              {/* Accept Volunteer Delivery Route (Available to all users) */}
+              {user && activeDelivery?.status === 'AVAILABLE' && (
                 <button
                   onClick={() => handleAcceptDelivery(activeDelivery.id)}
                   className="w-full py-3.5 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-sm shadow-lg shadow-purple-600/30 transition flex items-center justify-center gap-2"

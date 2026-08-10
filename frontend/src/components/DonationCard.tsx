@@ -134,7 +134,7 @@ export const DonationCard: React.FC<DonationCardProps> = ({ donation }) => {
             to={`/donations/${donation.id}`}
             className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white font-semibold text-xs transition-colors duration-200 flex items-center justify-center gap-1.5 shadow-sm group-hover:shadow-md"
           >
-            <span>View Donation Details</span>
+            <span>View & Request Food</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>

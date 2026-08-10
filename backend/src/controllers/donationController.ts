@@ -191,8 +191,8 @@ export const getDonationById = async (req: Request, res: Response) => {
 
 export const createDonation = async (req: AuthRequest, res: Response) => {
   try {
-    if (!req.user || (req.user.role !== 'DONOR' && req.user.role !== 'ADMIN')) {
-      return res.status(403).json({ error: 'Only registered Donors can create food listings.' });
+    if (!req.user) {
+      return res.status(401).json({ error: 'Authentication required to post food donations.' });
     }
 
     const validated = donationSchema.parse(req.body);
