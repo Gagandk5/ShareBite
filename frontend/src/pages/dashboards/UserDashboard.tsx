@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   PlusCircle,
   UtensilsCrossed,
@@ -11,7 +11,8 @@ import {
   HeartHandshake,
   Search,
   Check,
-  Package
+  Package,
+  RotateCw
 } from 'lucide-react';
 import { apiFetch } from '../../services/api';
 import { Donation, FoodRequest, Delivery } from '../../types';
@@ -21,6 +22,7 @@ import { useToast } from '../../contexts/ToastContext';
 export const UserDashboard: React.FC = () => {
   const { user } = useAuth();
   const { showToast } = useToast();
+  const location = useLocation();
 
   const [activeTab, setActiveTab] = useState<'donations' | 'requests' | 'deliveries'>('donations');
   const [loading, setLoading] = useState(true);
@@ -56,7 +58,7 @@ export const UserDashboard: React.FC = () => {
     if (user) {
       loadAllData();
     }
-  }, [user]);
+  }, [user, location.pathname, location.key]);
 
   // Actions
   const handleRequestAction = async (requestId: string, status: 'ACCEPTED' | 'REJECTED') => {
@@ -125,13 +127,24 @@ export const UserDashboard: React.FC = () => {
           </p>
         </div>
 
-        <Link
-          to="/donate"
-          className="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg transition flex items-center gap-2 shrink-0"
-        >
-          <PlusCircle className="w-5 h-5" />
-          <span>+ Donate Food</span>
-        </Link>
+        <div className="flex items-center gap-3 shrink-0">
+          <button
+            onClick={() => loadAllData()}
+            className="p-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center gap-1.5"
+            title="Refresh dashboard data"
+          >
+            <RotateCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            <span>Refresh</span>
+          </button>
+
+          <Link
+            to="/donate"
+            className="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg transition flex items-center gap-2"
+          >
+            <PlusCircle className="w-5 h-5" />
+            <span>+ Donate Food</span>
+          </Link>
+        </div>
       </div>
 
       {/* Metric Cards Grid */}

@@ -124,8 +124,8 @@ export const DonationDetailsPage: React.FC = () => {
   const handleAcceptDelivery = async (deliveryId: string) => {
     try {
       await apiFetch(`/deliveries/${deliveryId}/accept`, { method: 'POST' });
-      showToast('Delivery task accepted! Added to your schedule.', 'success');
-      fetchDetails();
+      showToast('Delivery route accepted! Redirecting to your dashboard.', 'success');
+      navigate('/dashboard');
     } catch (err: any) {
       showToast(err.message || 'Failed to accept delivery.', 'error');
     }

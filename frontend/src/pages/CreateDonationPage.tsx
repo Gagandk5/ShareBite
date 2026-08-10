@@ -86,7 +86,7 @@ export const CreateDonationPage: React.FC = () => {
       });
 
       showToast('Food donation published successfully!', 'success');
-      navigate('/find-food');
+      navigate('/dashboard');
     } catch (err: any) {
       showToast(err.message || 'Failed to publish donation.', 'error');
     } finally {
