@@ -58,23 +58,6 @@ export const LoginPage: React.FC = () => {
           <p className="text-xs text-slate-500">Log in to manage food donations and rescue tasks</p>
         </div>
 
-        {/* Quick Demo Credentials Banner */}
-        <div className="bg-amber-50 border border-amber-200/80 rounded-2xl p-3.5 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-bold text-amber-900">
-            <HeartHandshake className="w-4 h-4 text-amber-600" />
-            <span>Instant Demo Credentials</span>
-          </div>
-          <button
-            onClick={() => {
-              setEmail('demo@example.com');
-              setPassword('Password123!');
-            }}
-            className="py-1.5 px-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition shadow-sm"
-          >
-            Fill Demo Login
-          </button>
-        </div>
-
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

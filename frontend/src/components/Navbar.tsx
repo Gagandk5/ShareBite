@@ -102,17 +102,6 @@ export const Navbar: React.FC = () => {
           {/* Right Action Bar */}
           <div className="hidden md:flex items-center gap-3">
             
-            {/* 1-Click Demo Login */}
-            {!user && (
-              <button
-                onClick={() => quickDemoLogin('USER')}
-                className="px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition flex items-center gap-1.5"
-              >
-                <HeartHandshake className="w-3.5 h-3.5 text-amber-600" />
-                <span>1-Click Demo Login</span>
-              </button>
-            )}
-
             {user ? (
               <>
                 {/* Donate CTA button for All Users */}
