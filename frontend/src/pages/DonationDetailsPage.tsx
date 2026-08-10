@@ -375,8 +375,8 @@ export const DonationDetailsPage: React.FC = () => {
                 </>
               )}
 
-              {/* Accept Volunteer Delivery Route */}
-              {user && activeDelivery?.status === 'AVAILABLE' && (
+              {/* Accept Volunteer Delivery Route (Available only when donation is RESERVED) */}
+              {user && donation.status === 'RESERVED' && activeDelivery?.status === 'AVAILABLE' && (
                 <button
                   onClick={() => handleAcceptDelivery(activeDelivery.id)}
                   className="w-full py-3.5 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-sm shadow-lg shadow-purple-600/30 transition flex items-center justify-center gap-2"

@@ -9,6 +9,9 @@ export const getDeliveries = async (req: AuthRequest, res: Response) => {
     const where: any = {};
     if (status) {
       where.status = status as string;
+      if (status === 'AVAILABLE') {
+        where.donation = { status: 'RESERVED' };
+      }
     }
     if (volunteerId) {
       where.volunteerId = volunteerId as string;
@@ -54,8 +57,8 @@ export const acceptDelivery = async (req: AuthRequest, res: Response) => {
       return res.status(404).json({ error: 'Delivery task not found.' });
     }
 
-    if (delivery.status !== 'AVAILABLE') {
-      return res.status(400).json({ error: 'This delivery task is no longer available.' });
+    if (delivery.status !== 'AVAILABLE' || delivery.donation.status !== 'RESERVED') {
+      return res.status(400).json({ error: 'Delivery route options are only available once a food donation is in the RESERVED phase.' });
     }
 
     // Check overlap rule: Ensure volunteer has no active delivery task in overlapping pickup time window

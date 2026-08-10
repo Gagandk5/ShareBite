@@ -227,7 +227,7 @@ export const createDonation = async (req: AuthRequest, res: Response) => {
         donationId: donation.id,
         pickupLocation: donation.address + ', ' + donation.city,
         deliveryLocation: 'Recipient Address (TBD)',
-        status: 'AVAILABLE'
+        status: 'PENDING_RESERVATION'
       }
     });
 

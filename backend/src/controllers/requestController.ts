@@ -163,7 +163,10 @@ export const updateRequestStatus = async (req: AuthRequest, res: Response) => {
       const recipientAddress = requestItem.recipient.city ? `${requestItem.recipient.name}, ${requestItem.recipient.city}` : `${requestItem.recipient.name} Address`;
       await prisma.delivery.updateMany({
         where: { donationId: requestItem.donationId },
-        data: { deliveryLocation: recipientAddress }
+        data: {
+          deliveryLocation: recipientAddress,
+          status: 'AVAILABLE'
+        }
       });
 
       // Reject all other pending requests for this donation
