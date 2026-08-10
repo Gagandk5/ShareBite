@@ -140,13 +140,6 @@ export const Navbar: React.FC = () => {
                       <span className="font-semibold text-purple-800">Volunteer (Alex)</span>
                       <span className="text-[10px] bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">VOLUNTEER</span>
                     </button>
-                    <button
-                      onClick={() => handleDemoSwitch('ADMIN')}
-                      className="w-full text-left px-3 py-2 text-xs hover:bg-rose-50 text-slate-700 rounded-lg flex items-center justify-between"
-                    >
-                      <span className="font-semibold text-rose-800">Admin (Sarah)</span>
-                      <span className="text-[10px] bg-rose-100 text-rose-700 px-1.5 py-0.5 rounded">ADMIN</span>
-                    </button>
                   </div>
                 </div>
               )}
@@ -154,8 +147,8 @@ export const Navbar: React.FC = () => {
 
             {user ? (
               <>
-                {/* Donate CTA button for Donors/Admins */}
-                {(user.role === 'DONOR' || user.role === 'ADMIN') && (
+                {/* Donate CTA button for Donors */}
+                {user.role === 'DONOR' && (
                   <Link
                     to="/donate"
                     className="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-md shadow-emerald-600/20 flex items-center gap-1.5 transition active:scale-95"
@@ -329,7 +322,7 @@ export const Navbar: React.FC = () => {
               >
                 My Dashboard ({user.role})
               </Link>
-              {(user.role === 'DONOR' || user.role === 'ADMIN') && (
+              {user.role === 'DONOR' && (
                 <Link
                   to="/donate"
                   onClick={() => setMobileMenuOpen(false)}

@@ -64,7 +64,7 @@ export const LoginPage: React.FC = () => {
             <HeartHandshake className="w-4 h-4 text-amber-600" />
             <span>1-Click Demo Login Badges</span>
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             <button
               onClick={() => handleDemoClick('DONOR')}
               className="py-1.5 px-2 bg-white text-emerald-800 border border-emerald-200 rounded-lg text-xs font-semibold hover:bg-emerald-50 transition"
@@ -82,12 +82,6 @@ export const LoginPage: React.FC = () => {
               className="py-1.5 px-2 bg-white text-purple-800 border border-purple-200 rounded-lg text-xs font-semibold hover:bg-purple-50 transition"
             >
               Volunteer Demo
-            </button>
-            <button
-              onClick={() => handleDemoClick('ADMIN')}
-              className="py-1.5 px-2 bg-white text-rose-800 border border-rose-200 rounded-lg text-xs font-semibold hover:bg-rose-50 transition"
-            >
-              Admin Demo
             </button>
           </div>
         </div>

@@ -67,8 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const roleEmailMap: Record<Role, string> = {
       DONOR: 'donor@example.com',
       RECIPIENT: 'recipient@example.com',
-      VOLUNTEER: 'volunteer@example.com',
-      ADMIN: 'admin@example.com'
+      VOLUNTEER: 'volunteer@example.com'
     };
     await login(roleEmailMap[role], 'Password123!');
   };

@@ -4,7 +4,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { DonorDashboard } from './dashboards/DonorDashboard';
 import { RecipientDashboard } from './dashboards/RecipientDashboard';
 import { VolunteerDashboard } from './dashboards/VolunteerDashboard';
-import { AdminDashboard } from './dashboards/AdminDashboard';
 
 export const DashboardRouter: React.FC = () => {
   const { user, loading } = useAuth();
@@ -29,8 +28,6 @@ export const DashboardRouter: React.FC = () => {
       return <RecipientDashboard />;
     case 'VOLUNTEER':
       return <VolunteerDashboard />;
-    case 'ADMIN':
-      return <AdminDashboard />;
     default:
       return <DonorDashboard />;
   }

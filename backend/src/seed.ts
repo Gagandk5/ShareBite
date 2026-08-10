@@ -70,24 +70,8 @@ async function main() {
     }
   });
 
-  await prisma.user.create({
-    data: {
-      name: 'Platform Admin',
-      email: 'admin@example.com',
-      passwordHash: demoPassword,
-      phone: '+91 99000 11111',
-      role: 'ADMIN',
-      profileImage: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80',
-      city: 'Bengaluru',
-      latitude: 12.9716,
-      longitude: 77.5946,
-      rating: 5.0,
-      verified: true
-    }
-  });
-
   console.log('✅ Database cleaned successfully! 0 fake food donations.');
-  console.log('✅ Created 4 clean demo accounts (Donor, Recipient, Volunteer, Admin).');
+  console.log('✅ Created 3 clean demo accounts (Donor, Recipient, Volunteer).');
 }
 
 main()

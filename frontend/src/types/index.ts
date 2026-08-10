@@ -1,4 +1,4 @@
-export type Role = 'DONOR' | 'RECIPIENT' | 'VOLUNTEER' | 'ADMIN';
+export type Role = 'DONOR' | 'RECIPIENT' | 'VOLUNTEER';
 
 export interface User {
   id: string;
