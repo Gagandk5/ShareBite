@@ -61,8 +61,6 @@ export const RegisterPage: React.FC = () => {
           <p className="text-xs text-slate-500">Join the ShareBite food rescue network</p>
         </div>
 
-
-
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

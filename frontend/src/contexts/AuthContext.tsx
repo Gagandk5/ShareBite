@@ -63,15 +63,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
   };
 
-  const quickDemoLogin = async (role?: Role) => {
-    const roleEmailMap: Record<string, string> = {
-      USER: 'demo@example.com',
-      DONOR: 'donor@example.com',
-      RECIPIENT: 'recipient@example.com',
-      VOLUNTEER: 'volunteer@example.com'
-    };
-    const targetEmail = role ? roleEmailMap[role] || 'demo@example.com' : 'demo@example.com';
-    await login(targetEmail, 'Password123!');
+  const quickDemoLogin = async (_role?: Role) => {
+    await login('demo@example.com', 'Password123!');
   };
 
   return (

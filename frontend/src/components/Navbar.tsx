@@ -102,61 +102,27 @@ export const Navbar: React.FC = () => {
           {/* Right Action Bar */}
           <div className="hidden md:flex items-center gap-3">
             
-            {/* Quick Demo Credentials Switcher */}
-            <div className="relative">
+            {/* 1-Click Demo Login */}
+            {!user && (
               <button
-                onClick={() => setDemoDropdownOpen(!demoDropdownOpen)}
+                onClick={() => quickDemoLogin('USER')}
                 className="px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition flex items-center gap-1.5"
               >
                 <HeartHandshake className="w-3.5 h-3.5 text-amber-600" />
-                <span>Demo Account</span>
+                <span>1-Click Demo Login</span>
               </button>
-
-              {demoDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200 p-2 z-50 animate-in fade-in zoom-in-95">
-                  <div className="px-3 py-2 border-b border-slate-100">
-                    <p className="text-xs font-bold text-slate-700">Quick Role Switcher</p>
-                    <p className="text-[11px] text-slate-500">1-click demo login for grading</p>
-                  </div>
-                  <div className="py-1">
-                    <button
-                      onClick={() => handleDemoSwitch('DONOR')}
-                      className="w-full text-left px-3 py-2 text-xs hover:bg-emerald-50 text-slate-700 rounded-lg flex items-center justify-between"
-                    >
-                      <span className="font-semibold text-emerald-800">Donor (Bistro)</span>
-                      <span className="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded">DONOR</span>
-                    </button>
-                    <button
-                      onClick={() => handleDemoSwitch('RECIPIENT')}
-                      className="w-full text-left px-3 py-2 text-xs hover:bg-sky-50 text-slate-700 rounded-lg flex items-center justify-between"
-                    >
-                      <span className="font-semibold text-sky-800">Recipient (Shelter)</span>
-                      <span className="text-[10px] bg-sky-100 text-sky-700 px-1.5 py-0.5 rounded">RECIPIENT</span>
-                    </button>
-                    <button
-                      onClick={() => handleDemoSwitch('VOLUNTEER')}
-                      className="w-full text-left px-3 py-2 text-xs hover:bg-purple-50 text-slate-700 rounded-lg flex items-center justify-between"
-                    >
-                      <span className="font-semibold text-purple-800">Volunteer (Alex)</span>
-                      <span className="text-[10px] bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">VOLUNTEER</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+            )}
 
             {user ? (
               <>
                 {/* Donate CTA button for All Users */}
-                {user && (
-                  <Link
-                    to="/donate"
-                    className="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-md shadow-emerald-600/20 flex items-center gap-1.5 transition active:scale-95"
-                  >
-                    <PlusCircle className="w-4 h-4" />
-                    <span>Donate Food</span>
-                  </Link>
-                )}
+                <Link
+                  to="/donate"
+                  className="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-md shadow-emerald-600/20 flex items-center gap-1.5 transition active:scale-95"
+                >
+                  <PlusCircle className="w-4 h-4" />
+                  <span>Donate Food</span>
+                </Link>
 
                 {/* Notifications Dropdown */}
                 <div className="relative">

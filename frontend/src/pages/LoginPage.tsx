@@ -58,32 +58,21 @@ export const LoginPage: React.FC = () => {
           <p className="text-xs text-slate-500">Log in to manage food donations and rescue tasks</p>
         </div>
 
-        {/* Quick Demo Accounts Banner */}
-        <div className="bg-amber-50 border border-amber-200/80 rounded-2xl p-3.5 space-y-2">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900">
+        {/* Quick Demo Credentials Banner */}
+        <div className="bg-amber-50 border border-amber-200/80 rounded-2xl p-3.5 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs font-bold text-amber-900">
             <HeartHandshake className="w-4 h-4 text-amber-600" />
-            <span>1-Click Demo Login Badges</span>
+            <span>Instant Demo Credentials</span>
           </div>
-          <div className="grid grid-cols-3 gap-2">
-            <button
-              onClick={() => handleDemoClick('DONOR')}
-              className="py-1.5 px-2 bg-white text-emerald-800 border border-emerald-200 rounded-lg text-xs font-semibold hover:bg-emerald-50 transition"
-            >
-              Donor Demo
-            </button>
-            <button
-              onClick={() => handleDemoClick('RECIPIENT')}
-              className="py-1.5 px-2 bg-white text-sky-800 border border-sky-200 rounded-lg text-xs font-semibold hover:bg-sky-50 transition"
-            >
-              Recipient Demo
-            </button>
-            <button
-              onClick={() => handleDemoClick('VOLUNTEER')}
-              className="py-1.5 px-2 bg-white text-purple-800 border border-purple-200 rounded-lg text-xs font-semibold hover:bg-purple-50 transition"
-            >
-              Volunteer Demo
-            </button>
-          </div>
+          <button
+            onClick={() => {
+              setEmail('demo@example.com');
+              setPassword('Password123!');
+            }}
+            className="py-1.5 px-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition shadow-sm"
+          >
+            Fill Demo Login
+          </button>
         </div>
 
         {/* Form */}

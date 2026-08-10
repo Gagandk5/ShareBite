@@ -14,14 +14,14 @@ model User {
   email        String    @unique
   passwordHash String
   phone        String?
-  role         String    @default("USER")
+  role         String    @default("USER") // Unified account for all features
   profileImage String?
   city         String?
   latitude     Float?
   longitude    Float?
   rating       Float     @default(5.0)
   verified     Boolean   @default(true)
-  status       String    @default("ACTIVE") // ACTIVE, SUSPENDED
+  status       String    @default("ACTIVE")
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 

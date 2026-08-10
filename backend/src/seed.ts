@@ -7,7 +7,7 @@ dotenv.config();
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🧹 Cleaning database and setting up clean initial state for Bengaluru...');
+  console.log('🧹 Cleaning database and setting up unified account model for Bengaluru...');
 
   // Clean all existing tables
   await prisma.message.deleteMany();
@@ -21,15 +21,15 @@ async function main() {
 
   const demoPassword = await bcrypt.hash('Password123!', 10);
 
-  // Create only the 4 core accounts for testing
+  // Create unified demo account
   await prisma.user.create({
     data: {
-      name: 'Bengaluru Food Donor',
-      email: 'donor@example.com',
+      name: 'ShareBite Community Member',
+      email: 'demo@example.com',
       passwordHash: demoPassword,
       phone: '+91 98765 43210',
-      role: 'DONOR',
-      profileImage: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=400&q=80',
+      role: 'USER',
+      profileImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
       city: 'Bengaluru',
       latitude: 12.9784,
       longitude: 77.6408,
@@ -38,40 +38,8 @@ async function main() {
     }
   });
 
-  await prisma.user.create({
-    data: {
-      name: 'Hope Shelter Bengaluru',
-      email: 'recipient@example.com',
-      passwordHash: demoPassword,
-      phone: '+91 98123 45678',
-      role: 'RECIPIENT',
-      profileImage: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=400&q=80',
-      city: 'Bengaluru',
-      latitude: 12.9340,
-      longitude: 77.6220,
-      rating: 5.0,
-      verified: true
-    }
-  });
-
-  await prisma.user.create({
-    data: {
-      name: 'Alex (Volunteer Driver)',
-      email: 'volunteer@example.com',
-      passwordHash: demoPassword,
-      phone: '+91 97654 32109',
-      role: 'VOLUNTEER',
-      profileImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-      city: 'Bengaluru',
-      latitude: 12.9360,
-      longitude: 77.6250,
-      rating: 5.0,
-      verified: true
-    }
-  });
-
   console.log('✅ Database cleaned successfully! 0 fake food donations.');
-  console.log('✅ Created 3 clean demo accounts (Donor, Recipient, Volunteer).');
+  console.log('✅ Created unified demo account (demo@example.com / Password123!).');
 }
 
 main()
