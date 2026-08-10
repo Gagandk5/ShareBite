@@ -56,7 +56,10 @@ export const getDonations = async (req: Request, res: Response) => {
     }
 
     if (donorId && donorId !== 'undefined' && donorId !== 'null' && donorId !== '') {
-      where.donorId = donorId as string;
+      where.OR = [
+        { donorId: donorId as string },
+        { donor: { email: donorId as string } }
+      ];
     }
 
     if (category && category !== 'ALL') {

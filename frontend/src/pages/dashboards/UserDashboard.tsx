@@ -35,17 +35,25 @@ export const UserDashboard: React.FC = () => {
   const [deliveries, setDeliveries] = useState<Delivery[]>([]);
 
   const loadAllData = async () => {
-    if (!user?.id) return;
+    if (!user) return;
     setLoading(true);
     try {
       const [donationsData, requestsData, myRequestsData, deliveriesData] = await Promise.all([
-        apiFetch<Donation[]>(`/donations?donorId=${user.id}`),
+        apiFetch<Donation[]>(`/donations?donorId=${user.id || user.email}`),
         apiFetch<FoodRequest[]>('/requests'),
         apiFetch<FoodRequest[]>('/requests/me'),
         apiFetch<Delivery[]>('/deliveries')
       ]);
 
-      setMyDonations(donationsData);
+      let userListings = donationsData;
+      if (!userListings || userListings.length === 0) {
+        const allDonations = await apiFetch<Donation[]>('/donations?maxDistance=ALL');
+        userListings = allDonations.filter(
+          (d) => d.donorId === user.id || d.donor?.email === user.email
+        );
+      }
+
+      setMyDonations(userListings);
       setIncomingRequests(requestsData);
       setMyRequests(myRequestsData);
       setDeliveries(deliveriesData);
