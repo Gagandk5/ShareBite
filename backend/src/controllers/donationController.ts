@@ -56,10 +56,7 @@ export const getDonations = async (req: Request, res: Response) => {
     }
 
     if (donorId && donorId !== 'undefined' && donorId !== 'null' && donorId !== '') {
-      where.OR = [
-        { donorId: donorId as string },
-        { donor: { email: donorId as string } }
-      ];
+      where.donorId = donorId as string;
     }
 
     if (category && category !== 'ALL') {
@@ -192,6 +189,53 @@ export const getDonationById = async (req: Request, res: Response) => {
     res.json({ ...donation, distance });
   } catch (error: any) {
     res.status(500).json({ error: error.message || 'Failed to fetch donation details' });
+  }
+};
+
+export const getMyDonations = async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    await updateExpiredDonations();
+
+    const donations = await prisma.donation.findMany({
+      where: { donorId: req.user.id },
+      include: {
+        donor: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            role: true,
+            rating: true,
+            verified: true,
+            city: true
+          }
+        },
+        requests: {
+          include: {
+            recipient: {
+              select: { id: true, name: true, email: true, phone: true, rating: true, verified: true }
+            }
+          }
+        },
+        deliveries: {
+          include: {
+            volunteer: {
+              select: { id: true, name: true, email: true, phone: true, rating: true, verified: true }
+            }
+          }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    res.json(donations);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || 'Failed to fetch my donations' });
   }
 };
 

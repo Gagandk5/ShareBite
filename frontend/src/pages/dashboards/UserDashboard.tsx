@@ -38,14 +38,14 @@ export const UserDashboard: React.FC = () => {
     if (!user) return;
     setLoading(true);
     try {
-      const [donationsData, requestsData, myRequestsData, deliveriesData] = await Promise.all([
-        apiFetch<Donation[]>(`/donations?donorId=${user.id || user.email}`),
+      const [myDonationsData, requestsData, myRequestsData, deliveriesData] = await Promise.all([
+        apiFetch<Donation[]>('/donations/me'),
         apiFetch<FoodRequest[]>('/requests'),
         apiFetch<FoodRequest[]>('/requests/me'),
         apiFetch<Delivery[]>('/deliveries')
       ]);
 
-      let userListings = donationsData;
+      let userListings = myDonationsData;
       if (!userListings || userListings.length === 0) {
         const allDonations = await apiFetch<Donation[]>('/donations?maxDistance=ALL');
         userListings = allDonations.filter(

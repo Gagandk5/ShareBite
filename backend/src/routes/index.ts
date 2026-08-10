@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { register, login, getMe } from '../controllers/authController';
 import {
   getDonations,
+  getMyDonations,
   getDonationById,
   createDonation,
   updateDonation,
@@ -54,6 +55,7 @@ router.get('/admin/analytics', authenticate, authorizeRoles('ADMIN'), getAdminAn
 
 // --- Donation Routes ---
 router.get('/donations', getDonations);
+router.get('/donations/me', authenticate, getMyDonations);
 router.get('/donations/:id', getDonationById);
 router.post('/donations', authenticate, createDonation);
 router.patch('/donations/:id', authenticate, updateDonation);
