@@ -12,7 +12,8 @@ import {
   Search,
   Check,
   Package,
-  RotateCw
+  RotateCw,
+  ArrowRight
 } from 'lucide-react';
 import { apiFetch } from '../../services/api';
 import { Donation, FoodRequest, Delivery } from '../../types';
@@ -301,19 +302,35 @@ export const UserDashboard: React.FC = () => {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {myDonations.map((d) => (
-                      <div key={d.id} className="p-4 rounded-2xl border border-slate-200 flex gap-4 bg-white hover:shadow-sm transition">
-                        <img src={d.imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80'} alt={d.foodName} className="w-20 h-20 object-cover rounded-xl shrink-0" />
-                        <div className="flex-1 space-y-1">
-                          <div className="flex items-start justify-between">
-                            <h4 className="font-bold text-slate-900 text-sm">{d.foodName}</h4>
-                            <button onClick={() => handleDeleteDonation(d.id)} className="text-slate-400 hover:text-rose-600 transition" title="Delete listing">
-                              <Trash2 className="w-4 h-4" />
-                            </button>
+                      <div key={d.id} className="p-4 rounded-2xl border border-slate-200 flex flex-col sm:flex-row gap-4 bg-white hover:shadow-md transition group">
+                        <img src={d.imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80'} alt={d.foodName} className="w-full sm:w-24 h-24 object-cover rounded-xl shrink-0" />
+                        <div className="flex-1 space-y-2 flex flex-col justify-between">
+                          <div className="space-y-1">
+                            <div className="flex items-start justify-between">
+                              <h4 className="font-bold text-slate-900 text-sm line-clamp-1">{d.foodName}</h4>
+                              <button onClick={() => handleDeleteDonation(d.id)} className="text-slate-400 hover:text-rose-600 transition ml-2 p-1" title="Delete listing">
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                            <p className="text-xs text-slate-500">{d.quantity} {d.unit} ({d.servings} Servings) • {d.category}</p>
+                            <span className={`inline-block text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${
+                              d.status === 'AVAILABLE' ? 'bg-emerald-100 text-emerald-800' :
+                              d.status === 'RESERVED' ? 'bg-teal-100 text-teal-800' :
+                              d.status === 'REQUESTED' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'
+                            }`}>
+                              Status: {d.status}
+                            </span>
                           </div>
-                          <p className="text-xs text-slate-500">{d.quantity} {d.unit} ({d.servings} Servings)</p>
-                          <span className="inline-block text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
-                            {d.status}
-                          </span>
+
+                          <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                            <Link
+                              to={`/donations/${d.id}`}
+                              className="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 transition"
+                            >
+                              <span>Manage Listing & Requests</span>
+                              <ArrowRight className="w-3.5 h-3.5" />
+                            </Link>
+                          </div>
                         </div>
                       </div>
                     ))}
