@@ -21,7 +21,6 @@ export const FindFoodPage: React.FC = () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      params.append('status', 'AVAILABLE');
       if (search.trim()) params.append('search', search.trim());
       if (category !== 'ALL') params.append('category', category);
       if (dietaryType !== 'ALL') params.append('dietaryType', dietaryType);

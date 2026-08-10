@@ -50,6 +50,9 @@ export const getDonations = async (req: Request, res: Response) => {
 
     if (status) {
       where.status = status as string;
+    } else if (!donorId) {
+      // Post remains visible in Find Food until it enters the RESERVED state
+      where.status = { in: ['AVAILABLE', 'REQUESTED'] };
     }
 
     if (donorId && donorId !== 'undefined' && donorId !== 'null' && donorId !== '') {
