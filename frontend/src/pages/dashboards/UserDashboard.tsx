@@ -34,10 +34,11 @@ export const UserDashboard: React.FC = () => {
   const [deliveries, setDeliveries] = useState<Delivery[]>([]);
 
   const loadAllData = async () => {
+    if (!user?.id) return;
     setLoading(true);
     try {
       const [donationsData, requestsData, myRequestsData, deliveriesData] = await Promise.all([
-        apiFetch<Donation[]>(`/donations?donorId=${user?.id}`),
+        apiFetch<Donation[]>(`/donations?donorId=${user.id}`),
         apiFetch<FoodRequest[]>('/requests'),
         apiFetch<FoodRequest[]>('/requests/me'),
         apiFetch<Delivery[]>('/deliveries')
@@ -55,10 +56,10 @@ export const UserDashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (user?.id) {
       loadAllData();
     }
-  }, [user, location.pathname, location.key]);
+  }, [user?.id, location.pathname, location.key]);
 
   // Actions
   const handleRequestAction = async (requestId: string, status: 'ACCEPTED' | 'REJECTED') => {

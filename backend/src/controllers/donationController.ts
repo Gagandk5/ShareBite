@@ -52,7 +52,7 @@ export const getDonations = async (req: Request, res: Response) => {
       where.status = status as string;
     }
 
-    if (donorId) {
+    if (donorId && donorId !== 'undefined' && donorId !== 'null' && donorId !== '') {
       where.donorId = donorId as string;
     }
 
