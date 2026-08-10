@@ -13,7 +13,7 @@ export const FindFoodPage: React.FC = () => {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('ALL');
   const [dietaryType, setDietaryType] = useState('ALL');
-  const [maxDistance, setMaxDistance] = useState('25');
+  const [maxDistance, setMaxDistance] = useState('ALL');
   const [sortBy, setSortBy] = useState('nearest');
   const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
 
@@ -144,6 +144,7 @@ export const FindFoodPage: React.FC = () => {
               onChange={(e) => setMaxDistance(e.target.value)}
               className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-emerald-500 font-medium"
             >
+              <option value="ALL">All Distances</option>
               <option value="5">Within 5 km</option>
               <option value="10">Within 10 km</option>
               <option value="25">Within 25 km</option>

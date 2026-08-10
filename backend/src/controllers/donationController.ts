@@ -111,7 +111,7 @@ export const getDonations = async (req: Request, res: Response) => {
       };
     });
 
-    if (maxDistance) {
+    if (maxDistance && maxDistance !== 'ALL') {
       const maxKm = parseFloat(maxDistance as string);
       result = result.filter((d) => d.distance <= maxKm);
     }
