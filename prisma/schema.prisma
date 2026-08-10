@@ -1,0 +1,150 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  phone        String?
+  role         String    // DONOR, RECIPIENT, VOLUNTEER, ADMIN
+  profileImage String?
+  city         String?
+  latitude     Float?
+  longitude    Float?
+  rating       Float     @default(5.0)
+  verified     Boolean   @default(true)
+  status       String    @default("ACTIVE") // ACTIVE, SUSPENDED
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  donations         Donation[]    @relation("DonorDonations")
+  foodRequests      FoodRequest[] @relation("RecipientRequests")
+  deliveries        Delivery[]    @relation("VolunteerDeliveries")
+  notifications     Notification[]
+  reviewsGiven      Review[]      @relation("Reviewer")
+  reviewsReceived   Review[]      @relation("ReviewedUser")
+  reportsFiled      Report[]      @relation("Reporter")
+  reportsReceived   Report[]      @relation("ReportedUser")
+  sentMessages      Message[]     @relation("Sender")
+  receivedMessages  Message[]     @relation("Receiver")
+}
+
+model Donation {
+  id           String      @id @default(uuid())
+  donorId      String
+  donor        User        @relation("DonorDonations", fields: [donorId], references: [id], onDelete: Cascade)
+  foodName     String
+  category     String      // Cooked Meals, Bakery & Bread, Produce & Fruits, Groceries & Packaged, Beverages, Dairy, Others
+  description  String
+  quantity     Float
+  unit         String      // kg, meals, boxes, items, liters
+  servings     Int
+  dietaryType  String      // VEGETARIAN, NON_VEGETARIAN, VEGAN
+  allergens    String?     // Comma separated e.g. "Nuts, Dairy, Gluten"
+  preparedAt   DateTime
+  expiresAt    DateTime
+  pickupStart  DateTime
+  pickupEnd    DateTime
+  address      String
+  city         String
+  latitude     Float
+  longitude    Float
+  imageUrl     String?
+  status       String      @default("AVAILABLE") // AVAILABLE, REQUESTED, RESERVED, PICKUP_ASSIGNED, COLLECTED, DELIVERED, COMPLETED, EXPIRED, CANCELLED
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  requests     FoodRequest[]
+  deliveries   Delivery[]
+  reviews      Review[]
+  reports      Report[]
+  messages     Message[]
+}
+
+model FoodRequest {
+  id          String    @id @default(uuid())
+  donationId  String
+  donation    Donation  @relation(fields: [donationId], references: [id], onDelete: Cascade)
+  recipientId String
+  recipient   User      @relation("RecipientRequests", fields: [recipientId], references: [id], onDelete: Cascade)
+  message     String?
+  status      String    @default("PENDING") // PENDING, ACCEPTED, REJECTED, CANCELLED
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Delivery {
+  id               String    @id @default(uuid())
+  donationId       String
+  donation         Donation  @relation(fields: [donationId], references: [id], onDelete: Cascade)
+  volunteerId      String?
+  volunteer        User?     @relation("VolunteerDeliveries", fields: [volunteerId], references: [id], onDelete: SetNull)
+  pickupLocation   String
+  deliveryLocation String
+  status           String    @default("AVAILABLE") // AVAILABLE, ASSIGNED, COLLECTED, DELIVERED, COMPLETED, CANCELLED
+  acceptedAt       DateTime?
+  collectedAt      DateTime?
+  deliveredAt      DateTime?
+  completedAt      DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   // DONATION_REQUEST, REQUEST_ACCEPTED, VOLUNTEER_ASSIGNED, COLLECTED, DELIVERED, GENERAL
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Review {
+  id             String   @id @default(uuid())
+  reviewerId     String
+  reviewer       User     @relation("Reviewer", fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewedUserId String
+  reviewedUser   User     @relation("ReviewedUser", fields: [reviewedUserId], references: [id], onDelete: Cascade)
+  donationId     String
+  donation       Donation @relation(fields: [donationId], references: [id], onDelete: Cascade)
+  rating         Int
+  comment        String?
+  createdAt      DateTime @default(now())
+}
+
+model Report {
+  id             String    @id @default(uuid())
+  reporterId     String
+  reporter       User      @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  reportedUserId String?
+  reportedUser   User?     @relation("ReportedUser", fields: [reportedUserId], references: [id], onDelete: SetNull)
+  donationId     String?
+  donation       Donation? @relation(fields: [donationId], references: [id], onDelete: SetNull)
+  reason         String    // Unsafe Food, Fake Donation, Spam, Harassment, Incorrect Information, Other Issue
+  description    String
+  status         String    @default("OPEN") // OPEN, UNDER_REVIEW, RESOLVED, DISMISSED
+  createdAt      DateTime  @default(now())
+  resolvedAt     DateTime?
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  senderId   String
+  sender     User     @relation("Sender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User     @relation("Receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  donationId String
+  donation   Donation @relation(fields: [donationId], references: [id], onDelete: Cascade)
+  message    String
+  read       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
