@@ -21,10 +21,11 @@ export const FindFoodPage: React.FC = () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
+      params.append('status', 'AVAILABLE');
       if (search.trim()) params.append('search', search.trim());
       if (category !== 'ALL') params.append('category', category);
       if (dietaryType !== 'ALL') params.append('dietaryType', dietaryType);
-      if (maxDistance) params.append('maxDistance', maxDistance);
+      if (maxDistance && maxDistance !== 'ALL') params.append('maxDistance', maxDistance);
       if (sortBy) params.append('sortBy', sortBy);
 
       const data = await apiFetch<Donation[]>(`/donations?${params.toString()}`);
@@ -52,7 +53,7 @@ export const FindFoodPage: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Discover Surplus Food</h1>
-          <p className="text-xs text-slate-500 mt-1">Browse available food rescue listings near your location</p>
+          <p className="text-xs text-slate-500 mt-1">Listing all active food donations across all locations & categories. Use filters below to narrow your search.</p>
         </div>
 
         {/* Grid vs Map View Toggle */}
