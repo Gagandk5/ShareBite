@@ -106,7 +106,7 @@ export const DonationCard: React.FC<DonationCardProps> = ({ donation }) => {
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-slate-800 truncate max-w-[150px] flex items-center gap-1">
-                  {donation.donor?.name || 'Community Donor'}
+                  Posted by {donation.donor?.name || 'Community Member'}
                   {donation.donor?.verified && (
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                   )}

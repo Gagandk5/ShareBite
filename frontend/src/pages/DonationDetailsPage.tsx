@@ -293,7 +293,7 @@ export const DonationDetailsPage: React.FC = () => {
                   </div>
                   <div>
                     <div className="flex items-center gap-1.5">
-                      <span className="font-bold text-sm text-slate-900">{donation.donor?.name || 'Community Donor'}</span>
+                      <span className="font-bold text-sm text-slate-900">Posted by {donation.donor?.name || 'Community Member'}</span>
                       {donation.donor?.verified && (
                         <ShieldCheck className="w-4 h-4 text-emerald-600" />
                       )}
