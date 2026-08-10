@@ -326,6 +326,17 @@ export const DonationDetailsPage: React.FC = () => {
                   </a>
                 </div>
               )}
+
+              {/* Individual Chatbox Button for Donor, Recipient, Volunteer Delivery Partner */}
+              {user && (
+                <button
+                  onClick={() => setChatDrawerOpen(true)}
+                  className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition mt-2"
+                >
+                  <MessageSquare className="w-4 h-4 text-emerald-400" />
+                  <span>Open Donation Chatbox</span>
+                </button>
+              )}
             </div>
 
             {/* Action Buttons Container */}

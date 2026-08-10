@@ -30,19 +30,9 @@ export const CreateDonationPage: React.FC = () => {
   const [address, setAddress] = useState('100 Feet Rd, Indiranagar');
   const [city, setCity] = useState('Bengaluru');
 
-  // Step 4: Image Picker & Upload
-  const [imageUrl, setImageUrl] = useState(
-    'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'
-  );
+  // Step 4: Image Upload
+  const [imageUrl, setImageUrl] = useState('');
   const [submitting, setSubmitting] = useState(false);
-
-  const sampleImages = [
-    { label: 'Cooked Bowls', url: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80' },
-    { label: 'Bakery Bread', url: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80' },
-    { label: 'Fresh Produce', url: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=800&q=80' },
-    { label: 'Sandwiches', url: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=800&q=80' },
-    { label: 'Dairy & Juice', url: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=800&q=80' }
-  ];
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -365,24 +355,16 @@ export const CreateDonationPage: React.FC = () => {
                 </div>
               )}
 
-              {/* Or Select Preset / Custom URL */}
-              <div className="space-y-2 pt-2 border-t border-slate-100">
-                <label className="block text-xs font-semibold text-slate-700">Or Select Sample Food Preset</label>
-                <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-                  {sampleImages.map((img, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => setImageUrl(img.url)}
-                      className={`p-1 rounded-xl border-2 overflow-hidden transition ${
-                        imageUrl === img.url ? 'border-emerald-600 ring-2 ring-emerald-200' : 'border-slate-200 opacity-70'
-                      }`}
-                    >
-                      <img src={img.url} alt={img.label} className="w-full h-14 object-cover rounded-lg" />
-                      <span className="text-[9px] font-semibold text-slate-600 block text-center mt-1 truncate">{img.label}</span>
-                    </button>
-                  ))}
-                </div>
+              {/* Or Paste Direct Image URL */}
+              <div className="space-y-1.5 pt-2 border-t border-slate-100">
+                <label className="block text-xs font-semibold text-slate-700">Or Provide Direct Image URL</label>
+                <input
+                  type="url"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  placeholder="https://example.com/food-photo.jpg"
+                  className="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                />
               </div>
 
             </div>
