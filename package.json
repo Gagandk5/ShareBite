@@ -13,6 +13,7 @@
     "build:frontend": "cd frontend && npm run build",
     "prisma:generate": "cd backend && npx prisma generate --schema=../prisma/schema.prisma",
     "prisma:push": "cd backend && npx prisma db push --schema=../prisma/schema.prisma",
-    "seed": "cd backend && npx tsx ../prisma/seed.ts"
+    "seed": "cd backend && npx tsx src/seed.ts",
+    "vercel-build": "cd backend && npx prisma generate --schema=../prisma/schema.prisma && cd ../frontend && npm run build"
   }
 }

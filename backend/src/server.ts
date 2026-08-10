@@ -27,6 +27,10 @@ app.use('/api', apiRouter);
 // Error handling middleware
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`🌱 ShareBite Server running on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🌱 ShareBite Server running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
