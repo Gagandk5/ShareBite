@@ -12,15 +12,19 @@ import {
   ShieldCheck,
   CheckCheck,
   MapPin,
-  HeartHandshake
+  HeartHandshake,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNotifications } from '../contexts/NotificationContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { Role } from '../types';
 
 export const Navbar: React.FC = () => {
   const { user, logout, quickDemoLogin } = useAuth();
   const { notifications, unreadCount, markAsRead } = useNotifications();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -102,6 +106,20 @@ export const Navbar: React.FC = () => {
           {/* Right Action Bar */}
           <div className="hidden md:flex items-center gap-3">
             
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition active:scale-95 border border-transparent dark:border-slate-700"
+              aria-label="Toggle Dark Mode"
+              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-5 h-5 text-amber-400 fill-amber-400/20" />
+              ) : (
+                <Moon className="w-5 h-5 text-slate-600" />
+              )}
+            </button>
+
             {/* 1-Click Demo Login */}
             {!user && (
               <button
