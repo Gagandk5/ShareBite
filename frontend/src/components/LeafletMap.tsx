@@ -5,7 +5,6 @@ import { Donation } from '../types';
 import { Link } from 'react-router-dom';
 import { MapPin, Users, Clock } from 'lucide-react';
 
-// Custom Leaflet marker icons
 const foodIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -23,7 +22,7 @@ interface LeafletMapProps {
 
 export const LeafletMap: React.FC<LeafletMapProps> = ({
   donations,
-  center = [40.73061, -73.935242],
+  center = [12.9716, 77.5946], // Default center set to Bengaluru, India
   zoom = 12
 }) => {
   return (

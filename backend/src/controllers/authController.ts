@@ -28,9 +28,9 @@ export const register = async (req: Request, res: Response) => {
         passwordHash,
         phone: validated.phone || null,
         role: validated.role,
-        city: validated.city || 'New York',
-        latitude: validated.latitude || 40.7128,
-        longitude: validated.longitude || -74.0060,
+        city: validated.city || 'Bengaluru',
+        latitude: validated.latitude || 12.9716,
+        longitude: validated.longitude || 77.5946,
         rating: 5.0,
         verified: true
       }

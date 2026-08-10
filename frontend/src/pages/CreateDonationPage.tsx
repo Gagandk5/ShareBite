@@ -27,8 +27,8 @@ export const CreateDonationPage: React.FC = () => {
   // Step 3: Pickup Location & Timing
   const [pickupStart, setPickupStart] = useState(new Date().toISOString().slice(0, 16));
   const [pickupEnd, setPickupEnd] = useState(new Date(Date.now() + 6 * 3600 * 1000).toISOString().slice(0, 16));
-  const [address, setAddress] = useState('142 Bleecker St');
-  const [city, setCity] = useState('New York');
+  const [address, setAddress] = useState('100 Feet Rd, Indiranagar');
+  const [city, setCity] = useState('Bengaluru');
 
   // Step 4: Image Picker
   const [imageUrl, setImageUrl] = useState(
@@ -73,8 +73,8 @@ export const CreateDonationPage: React.FC = () => {
           pickupEnd: new Date(pickupEnd).toISOString(),
           address,
           city,
-          latitude: 40.73061,
-          longitude: -73.935242,
+          latitude: 12.9784,
+          longitude: 77.6408,
           imageUrl
         })
       });

@@ -95,8 +95,8 @@ export const getDonations = async (req: Request, res: Response) => {
       orderBy: { createdAt: 'desc' }
     });
 
-    const userLat = lat ? parseFloat(lat as string) : 40.7128;
-    const userLng = lng ? parseFloat(lng as string) : -74.0060;
+    const userLat = lat ? parseFloat(lat as string) : 12.9716;
+    const userLng = lng ? parseFloat(lng as string) : 77.5946;
 
     let result = donations.map((donation) => {
       const distance = calculateHaversineDistance(
@@ -177,8 +177,8 @@ export const getDonationById = async (req: Request, res: Response) => {
     }
 
     const distance = calculateHaversineDistance(
-      40.7128,
-      -74.0060,
+      12.9716,
+      77.5946,
       donation.latitude,
       donation.longitude
     );

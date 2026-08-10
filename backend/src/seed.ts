@@ -1,10 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Starting ShareBite database seeding...');
+  console.log('🌱 Starting ShareBite database seeding (Bengaluru, India)...');
 
   // Clean existing tables
   await prisma.message.deleteMany();
@@ -18,18 +21,18 @@ async function main() {
 
   const demoPassword = await bcrypt.hash('Password123!', 10);
 
-  // 1. Primary Demo Users
+  // 1. Primary Demo Users (Bengaluru, India)
   const primaryDonor = await prisma.user.create({
     data: {
       name: 'Grand Horizon Bistro',
       email: 'donor@example.com',
       passwordHash: demoPassword,
-      phone: '+1 (555) 234-5678',
+      phone: '+91 98765 43210',
       role: 'DONOR',
       profileImage: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=400&q=80',
-      city: 'New York',
-      latitude: 40.73061,
-      longitude: -73.935242,
+      city: 'Bengaluru',
+      latitude: 12.9784,
+      longitude: 77.6408,
       rating: 4.9,
       verified: true
     }
@@ -40,12 +43,12 @@ async function main() {
       name: 'Hope Haven Shelter & Food Bank',
       email: 'recipient@example.com',
       passwordHash: demoPassword,
-      phone: '+1 (555) 876-5432',
+      phone: '+91 98123 45678',
       role: 'RECIPIENT',
       profileImage: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=400&q=80',
-      city: 'New York',
-      latitude: 40.7282,
-      longitude: -73.9942,
+      city: 'Bengaluru',
+      latitude: 12.9340,
+      longitude: 77.6220,
       rating: 5.0,
       verified: true
     }
@@ -56,12 +59,12 @@ async function main() {
       name: 'Alex Rivera',
       email: 'volunteer@example.com',
       passwordHash: demoPassword,
-      phone: '+1 (555) 345-6789',
+      phone: '+91 97654 32109',
       role: 'VOLUNTEER',
       profileImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-      city: 'New York',
-      latitude: 40.725,
-      longitude: -73.99,
+      city: 'Bengaluru',
+      latitude: 12.9360,
+      longitude: 77.6250,
       rating: 4.9,
       verified: true
     }
@@ -72,28 +75,28 @@ async function main() {
       name: 'Sarah Connor (Admin)',
       email: 'admin@example.com',
       passwordHash: demoPassword,
-      phone: '+1 (555) 000-1111',
+      phone: '+91 99000 11111',
       role: 'ADMIN',
       profileImage: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80',
-      city: 'New York',
-      latitude: 40.7128,
-      longitude: -74.006,
+      city: 'Bengaluru',
+      latitude: 12.9716,
+      longitude: 77.5946,
       rating: 5.0,
       verified: true
     }
   });
 
-  // Additional 9 Donors
+  // Additional 9 Donors in Bengaluru
   const donorData = [
-    { name: 'Green Garden Bakery', email: 'bakery@example.com', phone: '+1 (555) 111-2222', lat: 40.7418, lng: -73.9893, city: 'New York' },
-    { name: 'Fresh Fields Supermarket', email: 'freshfields@example.com', phone: '+1 (555) 222-3333', lat: 40.7589, lng: -73.9851, city: 'New York' },
-    { name: 'Campus Commons Cafeteria', email: 'campus@example.com', phone: '+1 (555) 333-4444', lat: 40.7291, lng: -73.9965, city: 'New York' },
-    { name: 'Artisan Oven Pizzeria', email: 'artisan@example.com', phone: '+1 (555) 444-5555', lat: 40.7215, lng: -73.9985, city: 'New York' },
-    { name: 'Organic Harvest Co.', email: 'harvest@example.com', phone: '+1 (555) 555-6666', lat: 40.735, lng: -73.991, city: 'New York' },
-    { name: 'Metro Hotel Events', email: 'metrohotel@example.com', phone: '+1 (555) 666-7777', lat: 40.7549, lng: -73.984, city: 'New York' },
-    { name: 'Nourish Meal Prep', email: 'nourish@example.com', phone: '+1 (555) 777-8888', lat: 40.7484, lng: -73.9857, city: 'New York' },
-    { name: 'Sunset Catering', email: 'sunset@example.com', phone: '+1 (555) 888-9999', lat: 40.7127, lng: -74.0059, city: 'New York' },
-    { name: 'The Friendly Pantry', email: 'pantry@example.com', phone: '+1 (555) 999-0000', lat: 40.732, lng: -73.988, city: 'New York' }
+    { name: 'Green Garden Bakery', email: 'bakery@example.com', phone: '+91 98450 11111', lat: 12.9352, lng: 77.6245, city: 'Bengaluru' },
+    { name: 'Fresh Fields Supermarket', email: 'freshfields@example.com', phone: '+91 98450 22222', lat: 12.9756, lng: 77.6066, city: 'Bengaluru' },
+    { name: 'Campus Commons Cafeteria', email: 'campus@example.com', phone: '+91 98450 33333', lat: 12.9250, lng: 77.5938, city: 'Bengaluru' },
+    { name: 'Artisan Oven Pizzeria', email: 'artisan@example.com', phone: '+91 98450 44444', lat: 12.9121, lng: 77.6445, city: 'Bengaluru' },
+    { name: 'Organic Harvest Co.', email: 'harvest@example.com', phone: '+91 98450 55555', lat: 12.9917, lng: 77.5712, city: 'Bengaluru' },
+    { name: 'Metro Hotel Events', email: 'metrohotel@example.com', phone: '+91 98450 66666', lat: 12.9698, lng: 77.7499, city: 'Bengaluru' },
+    { name: 'Nourish Meal Prep', email: 'nourish@example.com', phone: '+91 98450 77777', lat: 13.0358, lng: 77.5970, city: 'Bengaluru' },
+    { name: 'Sunset Catering', email: 'sunset@example.com', phone: '+91 98450 88888', lat: 12.8452, lng: 77.6602, city: 'Bengaluru' },
+    { name: 'The Friendly Pantry', email: 'pantry@example.com', phone: '+91 98450 99999', lat: 12.9592, lng: 77.6974, city: 'Bengaluru' }
   ];
 
   const donors = [primaryDonor];
@@ -116,17 +119,17 @@ async function main() {
     donors.push(user);
   }
 
-  // Additional 9 Recipients
+  // Additional 9 Recipients in Bengaluru
   const recipientData = [
-    { name: 'Community Care Shelter', email: 'shelter@example.com', lat: 40.718, lng: -73.995 },
-    { name: 'St. Jude Food Pantry', email: 'stjude@example.com', lat: 40.733, lng: -73.982 },
-    { name: 'Youth Outreach Center', email: 'youth@example.com', lat: 40.742, lng: -73.998 },
-    { name: 'Senior Wellness Hub', email: 'seniors@example.com', lat: 40.751, lng: -73.978 },
-    { name: 'Westside Community Kitchen', email: 'westside@example.com', lat: 40.759, lng: -73.992 },
-    { name: 'Downtown Mission Relief', email: 'mission@example.com', lat: 40.711, lng: -74.009 },
-    { name: 'Harbor Family House', email: 'harbor@example.com', lat: 40.704, lng: -74.012 },
-    { name: 'East Village Aid Network', email: 'eastvillage@example.com', lat: 40.726, lng: -73.981 },
-    { name: 'City Rescue Mission', email: 'cityrescue@example.com', lat: 40.745, lng: -73.986 }
+    { name: 'Community Care Shelter', email: 'shelter@example.com', lat: 12.9750, lng: 77.6380 },
+    { name: 'St. Jude Food Pantry', email: 'stjude@example.com', lat: 12.9280, lng: 77.5890 },
+    { name: 'Youth Outreach Center', email: 'youth@example.com', lat: 12.9100, lng: 77.6420 },
+    { name: 'Senior Wellness Hub', email: 'seniors@example.com', lat: 12.9940, lng: 77.5680 },
+    { name: 'Westside Community Kitchen', email: 'westside@example.com', lat: 12.9880, lng: 77.5540 },
+    { name: 'Downtown Mission Relief', email: 'mission@example.com', lat: 12.9710, lng: 77.6080 },
+    { name: 'Harbor Family House', email: 'harbor@example.com', lat: 12.9810, lng: 77.6190 },
+    { name: 'East Village Aid Network', email: 'eastvillage@example.com', lat: 12.9600, lng: 77.6380 },
+    { name: 'City Rescue Mission', email: 'cityrescue@example.com', lat: 12.9160, lng: 77.6100 }
   ];
 
   const recipients = [primaryRecipient];
@@ -137,7 +140,7 @@ async function main() {
         email: r.email,
         passwordHash: demoPassword,
         role: 'RECIPIENT',
-        city: 'New York',
+        city: 'Bengaluru',
         latitude: r.lat,
         longitude: r.lng,
         rating: 4.9,
@@ -147,7 +150,7 @@ async function main() {
     recipients.push(user);
   }
 
-  // Additional 9 Volunteers
+  // Additional 9 Volunteers in Bengaluru
   const volunteerNames = [
     'Jordan Lee', 'Taylor Smith', 'Morgan Davis', 'Sam Wilson',
     'Chris Martinez', 'Pat Taylor', 'Riley Johnson', 'Casey Brown', 'Jesse Garcia'
@@ -161,9 +164,9 @@ async function main() {
         email: `vol${i + 1}@example.com`,
         passwordHash: demoPassword,
         role: 'VOLUNTEER',
-        city: 'New York',
-        latitude: 40.72 + i * 0.005,
-        longitude: -73.99 + i * 0.003,
+        city: 'Bengaluru',
+        latitude: 12.93 + (i * 0.01),
+        longitude: 77.60 + (i * 0.01),
         rating: 4.8 + (i % 3) * 0.1,
         verified: true
       }
@@ -171,14 +174,14 @@ async function main() {
     volunteers.push(user);
   }
 
-  console.log('✅ Created Users (10 Donors, 10 Recipients, 10 Volunteers, 1 Admin)');
+  console.log('✅ Created Users in Bengaluru (10 Donors, 10 Recipients, 10 Volunteers, 1 Admin)');
 
-  // 25 Food Donations
+  // 25 Food Donations in Bengaluru
   const sampleDonations = [
     {
       foodName: 'Fresh Baked Sourdough & Croissants',
       category: 'Bakery & Bread',
-      description: 'Artisanal sourdough loaves and chocolate croissants baked fresh this morning. Perfectly edible and golden crisp.',
+      description: 'Artisanal sourdough loaves and chocolate croissants baked fresh this morning in Koramangala. Perfectly edible and golden crisp.',
       quantity: 15,
       unit: 'kg',
       servings: 45,
@@ -186,15 +189,15 @@ async function main() {
       allergens: 'Gluten, Wheat, Dairy',
       imageUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80',
       status: 'AVAILABLE',
-      address: '142 Bleecker St, New York, NY 10012',
-      lat: 40.7288,
-      lng: -73.9982,
+      address: '100 Feet Rd, Koramangala, Bengaluru',
+      lat: 12.9352,
+      lng: 77.6245,
       donorIndex: 1
     },
     {
       foodName: 'Surplus Gourmet Pasta & Sauce Bowls',
       category: 'Cooked Meals',
-      description: 'Freshly prepared Penne Arrabbiata and Creamy Mushroom Pasta from lunch event catering. Kept in food safety warming containers.',
+      description: 'Freshly prepared Penne Arrabbiata and Creamy Mushroom Pasta from lunch event catering in Indiranagar.',
       quantity: 25,
       unit: 'meals',
       servings: 50,
@@ -202,15 +205,15 @@ async function main() {
       allergens: 'Dairy, Gluten',
       imageUrl: 'https://images.unsplash.com/photo-1621996346565-e3d5d6281270?auto=format&fit=crop&w=800&q=80',
       status: 'REQUESTED',
-      address: '520 8th Ave, New York, NY 10018',
-      lat: 40.7538,
-      lng: -73.9912,
+      address: '12th Main Rd, Indiranagar, Bengaluru',
+      lat: 12.9784,
+      lng: 77.6408,
       donorIndex: 0
     },
     {
       foodName: 'Organic Apples & Banana Crate Pack',
       category: 'Produce & Fruits',
-      description: 'Crates of ripe organic Honeycrisp apples and Cavendish bananas. Perfect for shelters and youth snack programs.',
+      description: 'Crates of ripe organic apples and bananas from MG Road supermarket store.',
       quantity: 30,
       unit: 'kg',
       servings: 80,
@@ -218,31 +221,31 @@ async function main() {
       allergens: 'None',
       imageUrl: 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=800&q=80',
       status: 'AVAILABLE',
-      address: '230 W 34th St, New York, NY 10001',
-      lat: 40.7516,
-      lng: -73.9911,
+      address: 'MG Road Metro Station Area, Bengaluru',
+      lat: 12.9756,
+      lng: 77.6066,
       donorIndex: 2
     },
     {
       foodName: 'Assorted Sandwich Trays & Wraps',
       category: 'Cooked Meals',
-      description: 'Turkey avocado wraps, Caprese paninis, and roasted veggie sandwiches wrapped individually.',
+      description: 'Paneer tikka wraps, Caprese paninis, and roasted veggie sandwiches individually packed in Jayanagar.',
       quantity: 20,
       unit: 'boxes',
       servings: 40,
-      dietaryType: 'NON_VEGETARIAN',
-      allergens: 'Gluten, Poultry, Dairy',
+      dietaryType: 'VEGETARIAN',
+      allergens: 'Gluten, Dairy',
       imageUrl: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=800&q=80',
       status: 'RESERVED',
-      address: 'Washington Square Park E, New York, NY 10003',
-      lat: 40.7308,
-      lng: -73.9973,
+      address: '4th Block, Jayanagar, Bengaluru',
+      lat: 12.9250,
+      lng: 77.5938,
       donorIndex: 3
     },
     {
       foodName: 'Fresh Dairy Milk & Greek Yogurts',
       category: 'Dairy',
-      description: 'Sealed whole milk cartons and low-fat Greek yogurt tubs with best before date 5 days out.',
+      description: 'Sealed whole milk cartons and low-fat Greek yogurt tubs from HSR Layout store.',
       quantity: 12,
       unit: 'liters',
       servings: 35,
@@ -250,31 +253,31 @@ async function main() {
       allergens: 'Milk, Dairy',
       imageUrl: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=800&q=80',
       status: 'PICKUP_ASSIGNED',
-      address: '75 9th Ave, New York, NY 10011',
-      lat: 40.7423,
-      lng: -74.0062,
+      address: 'Sector 1, HSR Layout, Bengaluru',
+      lat: 12.9121,
+      lng: 77.6445,
       donorIndex: 4
     },
     {
-      foodName: 'Whole Roasted Chicken & Veggie Bowls',
+      foodName: 'Roasted Veggie & Biryani Rice Bowls',
       category: 'Cooked Meals',
-      description: 'Hot roasted chicken trays with seasoned potatoes and steamed carrots from hotel banquet.',
+      description: 'Hot vegetable biryani and curry trays from banquet event in Whitefield.',
       quantity: 40,
       unit: 'meals',
       servings: 60,
-      dietaryType: 'NON_VEGETARIAN',
-      allergens: 'Soy, Poultry',
-      imageUrl: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=800&q=80',
+      dietaryType: 'VEGETARIAN',
+      allergens: 'Spices, Soy',
+      imageUrl: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=800&q=80',
       status: 'COLLECTED',
-      address: '109 W 39th St, New York, NY 10018',
-      lat: 40.7533,
-      lng: -73.9855,
+      address: 'ITPL Main Rd, Whitefield, Bengaluru',
+      lat: 12.9698,
+      lng: 77.7499,
       donorIndex: 5
     },
     {
       foodName: 'Vegan Lentil Stew & Quinoa Bowls',
       category: 'Cooked Meals',
-      description: 'High-protein vegan Mediterranean lentil curry served with quinoa and flatbread.',
+      description: 'High-protein vegan Mediterranean lentil curry served with quinoa in Malleshwaram.',
       quantity: 18,
       unit: 'kg',
       servings: 55,
@@ -282,15 +285,15 @@ async function main() {
       allergens: 'Sesame',
       imageUrl: 'https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&w=800&q=80',
       status: 'DELIVERED',
-      address: '150 1st Ave, New York, NY 10009',
-      lat: 40.7289,
-      lng: -73.9841,
+      address: '8th Main, Malleshwaram, Bengaluru',
+      lat: 12.9917,
+      lng: 77.5712,
       donorIndex: 6
     },
     {
       foodName: 'Wood-fired Veggie & Margherita Pizzas',
       category: 'Cooked Meals',
-      description: '8 large freshly baked wood-fired pizzas untouched from a corporate lunch meeting.',
+      description: '8 large freshly baked wood-fired pizzas untouched from corporate lunch in Indiranagar.',
       quantity: 8,
       unit: 'boxes',
       servings: 32,
@@ -298,15 +301,15 @@ async function main() {
       allergens: 'Dairy, Gluten',
       imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80',
       status: 'COMPLETED',
-      address: '80 Spring St, New York, NY 10012',
-      lat: 40.7224,
-      lng: -73.9972,
+      address: '100 Feet Rd, Indiranagar, Bengaluru',
+      lat: 12.9784,
+      lng: 77.6408,
       donorIndex: 0
     },
     {
       foodName: 'Packaged Organic Rice & Grain Bags',
       category: 'Groceries & Packaged',
-      description: 'Unopened 5kg bags of Jasmine rice, brown rice, and whole oats.',
+      description: 'Unopened 5kg bags of Jasmine rice, brown rice, and whole oats in Electronic City.',
       quantity: 50,
       unit: 'kg',
       servings: 150,
@@ -314,15 +317,15 @@ async function main() {
       allergens: 'None',
       imageUrl: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80',
       status: 'COMPLETED',
-      address: '40 Central Park S, New York, NY 10019',
-      lat: 40.7651,
-      lng: -73.9754,
+      address: 'Phase 1, Electronic City, Bengaluru',
+      lat: 12.8452,
+      lng: 77.6602,
       donorIndex: 7
     },
     {
       foodName: 'Fresh Squeezed Orange & Berry Juices',
       category: 'Beverages',
-      description: 'Cold-pressed fruit juices in sealed glass bottles. 100% natural without additives.',
+      description: 'Cold-pressed fruit juices in sealed glass bottles from Hebbal outlet.',
       quantity: 20,
       unit: 'liters',
       servings: 40,
@@ -330,9 +333,9 @@ async function main() {
       allergens: 'None',
       imageUrl: 'https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=800&q=80',
       status: 'COMPLETED',
-      address: '350 5th Ave, New York, NY 10118',
-      lat: 40.7484,
-      lng: -73.9857,
+      address: 'Outer Ring Rd, Hebbal, Bengaluru',
+      lat: 13.0358,
+      lng: 77.5970,
       donorIndex: 8
     }
   ];
@@ -341,7 +344,7 @@ async function main() {
     sampleDonations.push({
       foodName: `Rescued Food Parcel Batch #${i}`,
       category: i % 2 === 0 ? 'Cooked Meals' : 'Produce & Fruits',
-      description: `Surplus nutritious food rescued from commercial food partners. Fully verified for food safety standards.`,
+      description: `Surplus nutritious food rescued from commercial food partners in Bengaluru. Fully verified for food safety standards.`,
       quantity: 15 + (i * 2),
       unit: i % 2 === 0 ? 'meals' : 'kg',
       servings: 30 + (i * 4),
@@ -349,9 +352,9 @@ async function main() {
       allergens: 'None',
       imageUrl: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=80',
       status: 'COMPLETED',
-      address: `${100 + i} 5th Ave, New York, NY 10011`,
-      lat: 40.7300 + (i * 0.002),
-      lng: -73.9900 - (i * 0.002),
+      address: `Sector ${i % 7 + 1}, HSR Layout, Bengaluru`,
+      lat: 12.9100 + (i * 0.003),
+      lng: 77.6200 + (i * 0.004),
       donorIndex: i % donors.length
     });
   }
@@ -383,7 +386,7 @@ async function main() {
         pickupStart: pickupStart,
         pickupEnd: pickupEnd,
         address: d.address,
-        city: 'New York',
+        city: 'Bengaluru',
         latitude: d.lat,
         longitude: d.lng,
         imageUrl: d.imageUrl,
@@ -473,7 +476,7 @@ async function main() {
     }
   });
 
-  console.log('✅ Created 25 Food Donations, Deliveries, Requests, Reviews, Reports, and Notifications!');
+  console.log('✅ Created 25 Food Donations, Deliveries, Requests, Reviews, Reports, and Notifications in Bengaluru!');
   console.log('🎉 Seeding finished successfully!');
 }
 
