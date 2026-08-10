@@ -4,7 +4,7 @@ export const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
-  phone: z.string().optional(),
+  phone: z.string().min(10, 'Phone number is required').regex(/^(\+91[\-\s]?)?[6-9]\d{9}$/, 'Please enter a valid 10-digit Indian phone number (e.g. +91 9876543210)'),
   role: z.string().optional(),
   city: z.string().optional(),
   latitude: z.number().optional(),

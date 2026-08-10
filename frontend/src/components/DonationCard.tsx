@@ -101,17 +101,22 @@ export const DonationCard: React.FC<DonationCardProps> = ({ donation }) => {
           {/* Donor Info */}
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100 text-xs">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-[10px]">
+              <div className="w-7 h-7 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs border border-emerald-200">
                 {donation.donor?.name.charAt(0) || 'D'}
               </div>
-              <span className="font-medium text-slate-700 truncate max-w-[140px]">
-                {donation.donor?.name || 'Commercial Donor'}
-              </span>
-              {donation.donor?.verified && (
-                <span title="Verified Donor">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <div className="flex flex-col">
+                <span className="font-bold text-slate-800 truncate max-w-[150px] flex items-center gap-1">
+                  {donation.donor?.name || 'Community Donor'}
+                  {donation.donor?.verified && (
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  )}
                 </span>
-              )}
+                {donation.donor?.phone && (
+                  <a href={`tel:${donation.donor.phone}`} className="text-[11px] text-emerald-700 font-semibold hover:underline flex items-center gap-1">
+                    📞 {donation.donor.phone}
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </div>

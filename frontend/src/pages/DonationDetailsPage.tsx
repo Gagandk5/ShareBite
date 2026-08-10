@@ -14,7 +14,8 @@ import {
   ChevronRight,
   ArrowLeft,
   Truck,
-  HeartHandshake
+  HeartHandshake,
+  Phone
 } from 'lucide-react';
 import { apiFetch } from '../services/api';
 import { Donation, FoodRequest, Delivery } from '../types';
@@ -281,37 +282,49 @@ export const DonationDetailsPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Donor Profile Box */}
-            <div className="p-4 rounded-2xl border border-slate-200/80 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center">
-                  {donation.donor?.name.charAt(0) || 'D'}
+            {/* Donor Profile & Contact Card */}
+            <div className="p-5 rounded-2xl border border-emerald-200/80 bg-emerald-50/40 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-emerald-600 text-white font-extrabold flex items-center justify-center text-base shadow-sm">
+                    {donation.donor?.name.charAt(0) || 'D'}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-bold text-sm text-slate-900">{donation.donor?.name || 'Community Donor'}</span>
+                      {donation.donor?.verified && (
+                        <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                      )}
+                    </div>
+                    <p className="text-xs text-slate-500 font-medium">{donation.donor?.city || 'Bengaluru'}, India</p>
+                  </div>
                 </div>
-                <div>
-                  <div className="flex items-center gap-1">
-                    <span className="font-bold text-xs text-slate-900">{donation.donor?.name}</span>
-                    {donation.donor?.verified && (
-                      <span title="Verified Donor">
-                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-1 text-[11px] text-slate-500 mt-0.5">
-                    <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                    <span className="font-semibold">{donation.donor?.rating || 5.0} Rating</span>
-                  </div>
+
+                <div className="flex items-center gap-1 text-xs bg-white px-2.5 py-1 rounded-full border border-slate-200 font-bold text-amber-600">
+                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                  <span>{donation.donor?.rating || 5.0}</span>
                 </div>
               </div>
 
-              {/* Chat Button */}
-              {user && user.id !== donation.donorId && (
-                <button
-                  onClick={() => setChatDrawerOpen(true)}
-                  className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1 transition"
-                >
-                  <MessageSquare className="w-4 h-4 text-emerald-600" />
-                  <span>Chat</span>
-                </button>
+              {/* Direct Call & WhatsApp Action Buttons */}
+              {donation.donor?.phone && (
+                <div className="pt-2 border-t border-emerald-100 flex items-center gap-2">
+                  <a
+                    href={`tel:${donation.donor.phone}`}
+                    className="flex-1 py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs text-center flex items-center justify-center gap-1.5 shadow-sm transition"
+                  >
+                    <Phone className="w-3.5 h-3.5" />
+                    <span>Call ({donation.donor.phone})</span>
+                  </a>
+                  <a
+                    href={`https://wa.me/${donation.donor.phone.replace(/[^0-9]/g, '')}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-3 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-xs text-center flex items-center gap-1 shadow-sm transition"
+                  >
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
               )}
             </div>
 
