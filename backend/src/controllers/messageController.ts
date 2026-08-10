@@ -12,7 +12,11 @@ export const getMessages = async (req: AuthRequest, res: Response) => {
 
     const messages = await prisma.message.findMany({
       where: {
-        donationId
+        donationId,
+        OR: [
+          { senderId: req.user.id },
+          { receiverId: req.user.id }
+        ]
       },
       include: {
         sender: { select: { id: true, name: true, role: true } },
@@ -40,17 +44,10 @@ export const sendMessage = async (req: AuthRequest, res: Response) => {
       return res.status(400).json({ error: 'Message cannot be empty' });
     }
 
-    // Default receiverId to donorId if not specified
-    let targetReceiverId = receiverId;
-    if (!targetReceiverId) {
-      const donation = await prisma.donation.findUnique({ where: { id: donationId } });
-      targetReceiverId = donation?.donorId || req.user.id;
-    }
-
     const newMessage = await prisma.message.create({
       data: {
         senderId: req.user.id,
-        receiverId: targetReceiverId,
+        receiverId,
         donationId,
         message: message.trim()
       },
