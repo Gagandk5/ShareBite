@@ -63,9 +63,23 @@ export const UserDashboard: React.FC = () => {
 
       const userListings = Array.from(userListingsMap.values());
 
+      const userRequestsMap = new Map<string, FoodRequest>();
+      (myRequestsData || []).forEach((r) => userRequestsMap.set(r.id, r));
+      (requestsData || []).forEach((r) => {
+        if (
+          r.recipientId === user.id ||
+          (user.email && r.recipient?.email === user.email) ||
+          (user.name && r.recipient?.name === user.name)
+        ) {
+          userRequestsMap.set(r.id, r);
+        }
+      });
+
+      const userRequests = Array.from(userRequestsMap.values());
+
       setMyDonations(userListings);
       setIncomingRequests(requestsData || []);
-      setMyRequests(myRequestsData || []);
+      setMyRequests(userRequests);
       setDeliveries(deliveriesData || []);
     } catch (err) {
       console.error('Failed to load user dashboard data:', err);
@@ -460,19 +474,79 @@ export const UserDashboard: React.FC = () => {
                   </Link>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {myRequests.map((req) => (
-                    <div key={req.id} className="p-4 rounded-2xl border border-slate-200 bg-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                      <div className="space-y-1">
-                        <p className="font-bold text-slate-900 text-sm">{req.donation?.foodName || 'Food Donation'}</p>
-                        <p className="text-xs text-slate-500">Requested: {new Date(req.createdAt).toLocaleDateString()}</p>
+                    <div key={req.id} className="p-5 rounded-2xl border border-slate-200 bg-white hover:shadow-md transition flex flex-col justify-between space-y-4">
+                      {/* Top Parcel Info */}
+                      <div className="flex gap-4">
+                        <img
+                          src={req.donation?.imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80'}
+                          alt={req.donation?.foodName || 'Food Parcel'}
+                          className="w-24 h-24 object-cover rounded-xl shrink-0"
+                        />
+                        <div className="flex-1 space-y-1">
+                          <h4 className="font-bold text-slate-900 text-base">{req.donation?.foodName || 'Food Parcel'}</h4>
+                          <p className="text-xs text-slate-500 font-medium">
+                            Posted by {req.donation?.donor?.name || 'Community Member'} • {req.donation?.servings} Servings
+                          </p>
+                          <span className={`inline-block text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase ${
+                            req.status === 'ACCEPTED' ? 'bg-emerald-100 text-emerald-800' :
+                            req.status === 'REJECTED' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'
+                          }`}>
+                            {req.status === 'ACCEPTED' ? '🎉 Request Accepted!' :
+                             req.status === 'REJECTED' ? 'Declined' : '⏳ Request Pending Approval'}
+                          </span>
+                        </div>
                       </div>
-                      <span className={`text-xs font-extrabold px-3 py-1 rounded-full ${
-                        req.status === 'ACCEPTED' ? 'bg-emerald-100 text-emerald-800' :
-                        req.status === 'REJECTED' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'
-                      }`}>
-                        {req.status}
-                      </span>
+
+                      {/* Interactive Contact / Status Box */}
+                      {req.status === 'ACCEPTED' && req.donation?.donor?.phone ? (
+                        <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="font-extrabold text-emerald-900 flex items-center gap-1.5">
+                              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                              Contact Donor ({req.donation.donor.name})
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 pt-1">
+                            <a
+                              href={`tel:${req.donation.donor.phone}`}
+                              className="px-3 py-1.5 bg-white border border-emerald-300 text-emerald-800 rounded-lg text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-100 transition shadow-sm"
+                            >
+                              <Phone className="w-3.5 h-3.5 text-emerald-600" />
+                              <span>Call ({req.donation.donor.phone})</span>
+                            </a>
+                            <a
+                              href={`https://wa.me/${req.donation.donor.phone.replace(/[^0-9]/g, '')}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-700 transition shadow-sm"
+                            >
+                              <MessageSquare className="w-3.5 h-3.5" />
+                              <span>WhatsApp</span>
+                            </a>
+                          </div>
+                        </div>
+                      ) : req.status === 'PENDING' ? (
+                        <div className="p-3 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-900 text-xs font-medium space-y-1">
+                          <p className="font-bold flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5 text-amber-600" />
+                            Request Submitted on {new Date(req.createdAt).toLocaleDateString()}
+                          </p>
+                          <p className="text-[11px] text-amber-800">The donor has been notified and will respond to your request shortly.</p>
+                        </div>
+                      ) : null}
+
+                      {/* Bottom Card Action Link */}
+                      <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                        <Link
+                          to={`/donations/${req.donationId}`}
+                          className="text-xs font-bold text-sky-700 hover:text-sky-800 flex items-center gap-1 transition"
+                        >
+                          <span>View Food Parcel Details</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
                     </div>
                   ))}
                 </div>
