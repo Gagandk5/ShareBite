@@ -499,6 +499,34 @@ export const UserDashboard: React.FC = () => {
                         </div>
                       </div>
 
+                      {/* Live Food Parcel Status Tracker */}
+                      {req.donation?.status && (
+                        <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+                          <div className="flex items-center justify-between text-xs font-bold text-slate-800">
+                            <span className="flex items-center gap-1.5">
+                              <Truck className="w-3.5 h-3.5 text-purple-600" />
+                              <span>Food Parcel Live Status</span>
+                            </span>
+                            <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded ${
+                              req.donation.status === 'RESERVED' ? 'bg-teal-100 text-teal-800' :
+                              req.donation.status === 'PICKUP_ASSIGNED' ? 'bg-purple-100 text-purple-800' :
+                              req.donation.status === 'COLLECTED' ? 'bg-sky-100 text-sky-800' :
+                              ['DELIVERED', 'COMPLETED'].includes(req.donation.status) ? 'bg-emerald-100 text-emerald-800' :
+                              'bg-amber-100 text-amber-800'
+                            }`}>
+                              {req.donation.status.replace('_', ' ')}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-600 font-medium">
+                            {req.donation.status === 'RESERVED' ? 'Reserved for your pickup & delivery.' :
+                             req.donation.status === 'PICKUP_ASSIGNED' ? 'Volunteer transport driver assigned for pickup route.' :
+                             req.donation.status === 'COLLECTED' ? 'Food parcel collected by driver and en route.' :
+                             ['DELIVERED', 'COMPLETED'].includes(req.donation.status) ? 'Food parcel delivered successfully!' :
+                             'Listing active for request approval.'}
+                          </p>
+                        </div>
+                      )}
+
                       {/* Interactive Contact / Status Box */}
                       {req.status === 'ACCEPTED' && req.donation?.donor?.phone ? (
                         <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2">
