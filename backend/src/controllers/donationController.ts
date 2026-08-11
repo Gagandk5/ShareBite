@@ -201,7 +201,13 @@ export const getMyDonations = async (req: AuthRequest, res: Response) => {
     await updateExpiredDonations();
 
     const donations = await prisma.donation.findMany({
-      where: { donorId: req.user.id },
+      where: {
+        OR: [
+          { donorId: req.user.id },
+          { donor: { email: req.user.email } },
+          { donor: { name: req.user.name } }
+        ]
+      },
       include: {
         donor: {
           select: {

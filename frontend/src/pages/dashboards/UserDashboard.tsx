@@ -40,25 +40,33 @@ export const UserDashboard: React.FC = () => {
     if (!user) return;
     setLoading(true);
     try {
-      const [myDonationsData, requestsData, myRequestsData, deliveriesData] = await Promise.all([
-        apiFetch<Donation[]>('/donations/me'),
-        apiFetch<FoodRequest[]>('/requests'),
-        apiFetch<FoodRequest[]>('/requests/me'),
-        apiFetch<Delivery[]>('/deliveries')
+      const [myDonationsData, allDonationsData, requestsData, myRequestsData, deliveriesData] = await Promise.all([
+        apiFetch<Donation[]>('/donations/me').catch(() => []),
+        apiFetch<Donation[]>('/donations').catch(() => []),
+        apiFetch<FoodRequest[]>('/requests').catch(() => []),
+        apiFetch<FoodRequest[]>('/requests/me').catch(() => []),
+        apiFetch<Delivery[]>('/deliveries').catch(() => [])
       ]);
 
-      let userListings = myDonationsData;
-      if (!userListings || userListings.length === 0) {
-        const allDonations = await apiFetch<Donation[]>('/donations?maxDistance=ALL');
-        userListings = allDonations.filter(
-          (d) => d.donorId === user.id || d.donor?.email === user.email
-        );
-      }
+      const userListingsMap = new Map<string, Donation>();
+      
+      (myDonationsData || []).forEach((d) => userListingsMap.set(d.id, d));
+      (allDonationsData || []).forEach((d) => {
+        if (
+          d.donorId === user.id ||
+          (user.email && d.donor?.email === user.email) ||
+          (user.name && d.donor?.name === user.name)
+        ) {
+          userListingsMap.set(d.id, d);
+        }
+      });
+
+      const userListings = Array.from(userListingsMap.values());
 
       setMyDonations(userListings);
-      setIncomingRequests(requestsData);
-      setMyRequests(myRequestsData);
-      setDeliveries(deliveriesData);
+      setIncomingRequests(requestsData || []);
+      setMyRequests(myRequestsData || []);
+      setDeliveries(deliveriesData || []);
     } catch (err) {
       console.error('Failed to load user dashboard data:', err);
     } finally {
