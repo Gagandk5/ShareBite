@@ -349,15 +349,24 @@ export const DonationDetailsPage: React.FC = () => {
               {/* Authenticated Member Actions (Not Creator) */}
               {user && !isDonor && (
                 <>
-                  {hasRequested ? (
-                    <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-center text-xs font-bold flex items-center justify-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                      <span>Food Request Submitted (Pending Approval)</span>
-                    </div>
-                  ) : hasAcceptedRequest ? (
-                    <div className="p-4 rounded-2xl bg-teal-50 border border-teal-200 text-teal-900 text-center text-xs font-bold flex items-center justify-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-teal-600" />
-                      <span>Your Request Was Accepted! Coordinate Pickup Above</span>
+                  {hasRequested || hasAcceptedRequest ? (
+                    <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200 text-emerald-900 space-y-2">
+                      <div className="flex items-center justify-between text-xs font-extrabold">
+                        <span className="flex items-center gap-1.5 text-emerald-800">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                          <span>Request Status: {hasAcceptedRequest ? 'Accepted!' : 'Pending Approval'}</span>
+                        </span>
+                        <span className="px-2 py-0.5 rounded bg-emerald-200/80 text-emerald-900 font-extrabold text-[10px] uppercase">
+                          Parcel Status: {donation.status.replace('_', ' ')}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-emerald-700 font-medium">
+                        {donation.status === 'RESERVED' ? 'Food parcel is reserved for your pickup & delivery.' :
+                         donation.status === 'PICKUP_ASSIGNED' ? 'A volunteer driver accepted the pickup route.' :
+                         donation.status === 'COLLECTED' ? 'Volunteer driver has picked up the food parcel.' :
+                         donation.status === 'DELIVERED' || donation.status === 'COMPLETED' ? 'Food parcel delivered successfully!' :
+                         'Your request is under donor review. Use direct Call/WhatsApp above to coordinate.'}
+                      </p>
                     </div>
                   ) : (['AVAILABLE', 'REQUESTED'].includes(donation.status)) ? (
                     <button
