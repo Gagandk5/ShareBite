@@ -13,7 +13,9 @@ import {
   Check,
   Package,
   RotateCw,
-  ArrowRight
+  ArrowRight,
+  Phone,
+  MessageSquare
 } from 'lucide-react';
 import { apiFetch } from '../../services/api';
 import { Donation, FoodRequest, Delivery } from '../../types';
@@ -308,40 +310,122 @@ export const UserDashboard: React.FC = () => {
                     </Link>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {myDonations.map((d) => (
-                      <div key={d.id} className="p-4 rounded-2xl border border-slate-200 flex flex-col sm:flex-row gap-4 bg-white hover:shadow-md transition group">
-                        <img src={d.imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80'} alt={d.foodName} className="w-full sm:w-24 h-24 object-cover rounded-xl shrink-0" />
-                        <div className="flex-1 space-y-2 flex flex-col justify-between">
-                          <div className="space-y-1">
-                            <div className="flex items-start justify-between">
-                              <h4 className="font-bold text-slate-900 text-sm line-clamp-1">{d.foodName}</h4>
-                              <button onClick={() => handleDeleteDonation(d.id)} className="text-slate-400 hover:text-rose-600 transition ml-2 p-1" title="Delete listing">
-                                <Trash2 className="w-4 h-4" />
-                              </button>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {myDonations.map((d) => {
+                      const pendingItemRequests = d.requests?.filter((r) => r.status === 'PENDING') || [];
+                      const acceptedItemRequest = d.requests?.find((r) => r.status === 'ACCEPTED');
+
+                      return (
+                        <div key={d.id} className="p-5 rounded-2xl border border-slate-200 bg-white hover:shadow-md transition flex flex-col justify-between space-y-4">
+                          {/* Item Top Info */}
+                          <div className="flex gap-4">
+                            <img src={d.imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80'} alt={d.foodName} className="w-24 h-24 object-cover rounded-xl shrink-0" />
+                            <div className="flex-1 space-y-1">
+                              <div className="flex items-start justify-between">
+                                <h4 className="font-bold text-slate-900 text-base">{d.foodName}</h4>
+                                <button onClick={() => handleDeleteDonation(d.id)} className="text-slate-400 hover:text-rose-600 transition p-1" title="Delete listing">
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                              <p className="text-xs text-slate-500 font-medium">{d.quantity} {d.unit} ({d.servings} Servings) • {d.category}</p>
+                              <span className={`inline-block text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase ${
+                                d.status === 'AVAILABLE' ? 'bg-emerald-100 text-emerald-800' :
+                                d.status === 'RESERVED' ? 'bg-teal-100 text-teal-800' :
+                                d.status === 'REQUESTED' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'
+                              }`}>
+                                Status: {d.status}
+                              </span>
                             </div>
-                            <p className="text-xs text-slate-500">{d.quantity} {d.unit} ({d.servings} Servings) • {d.category}</p>
-                            <span className={`inline-block text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${
-                              d.status === 'AVAILABLE' ? 'bg-emerald-100 text-emerald-800' :
-                              d.status === 'RESERVED' ? 'bg-teal-100 text-teal-800' :
-                              d.status === 'REQUESTED' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'
-                            }`}>
-                              Status: {d.status}
-                            </span>
                           </div>
 
+                          {/* Interactive Request Management Inside Card */}
+                          {pendingItemRequests.length > 0 ? (
+                            <div className="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200 space-y-2.5">
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs font-extrabold text-amber-900 flex items-center gap-1.5">
+                                  <Clock className="w-4 h-4 text-amber-600" />
+                                  Incoming Requests ({pendingItemRequests.length})
+                                </span>
+                              </div>
+                              <div className="space-y-2">
+                                {pendingItemRequests.map((req) => (
+                                  <div key={req.id} className="p-3 rounded-lg bg-white border border-amber-200/80 space-y-2 shadow-sm">
+                                    <div className="flex items-center justify-between text-xs">
+                                      <span className="font-extrabold text-slate-900">{req.recipient?.name || 'Community Member'}</span>
+                                      {req.recipient?.phone && (
+                                        <span className="text-[11px] font-bold text-slate-600 font-mono">📞 {req.recipient.phone}</span>
+                                      )}
+                                    </div>
+                                    {req.message && (
+                                      <p className="text-[11px] text-slate-600 italic">"{req.message}"</p>
+                                    )}
+                                    <div className="flex items-center gap-2 pt-1">
+                                      <button
+                                        onClick={() => handleRequestAction(req.id, 'ACCEPTED')}
+                                        className="flex-1 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-xs shadow-sm transition flex items-center justify-center gap-1"
+                                      >
+                                        <Check className="w-3.5 h-3.5" />
+                                        <span>Accept Request</span>
+                                      </button>
+                                      <button
+                                        onClick={() => handleRequestAction(req.id, 'REJECTED')}
+                                        className="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-bold text-xs transition"
+                                      >
+                                        Reject
+                                      </button>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ) : acceptedItemRequest ? (
+                            <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2">
+                              <div className="flex items-center justify-between text-xs">
+                                <span className="font-extrabold text-emerald-900 flex items-center gap-1.5">
+                                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                                  Reserved for {acceptedItemRequest.recipient?.name}
+                                </span>
+                              </div>
+                              {acceptedItemRequest.recipient?.phone && (
+                                <div className="flex items-center gap-2 pt-1">
+                                  <a
+                                    href={`tel:${acceptedItemRequest.recipient.phone}`}
+                                    className="px-3 py-1.5 bg-white border border-emerald-300 text-emerald-800 rounded-lg text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-100 transition shadow-sm"
+                                  >
+                                    <Phone className="w-3.5 h-3.5 text-emerald-600" />
+                                    <span>Call ({acceptedItemRequest.recipient.phone})</span>
+                                  </a>
+                                  <a
+                                    href={`https://wa.me/${acceptedItemRequest.recipient.phone.replace(/[^0-9]/g, '')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-700 transition shadow-sm"
+                                  >
+                                    <MessageSquare className="w-3.5 h-3.5" />
+                                    <span>WhatsApp</span>
+                                  </a>
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 text-slate-500 text-xs font-medium">
+                              No recipient requests yet. Your listing is live and discoverable on Find Food.
+                            </div>
+                          )}
+
+                          {/* Bottom Card Action Link */}
                           <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
                             <Link
                               to={`/donations/${d.id}`}
                               className="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 transition"
                             >
-                              <span>Manage Listing & Requests</span>
+                              <span>View Listing Details</span>
                               <ArrowRight className="w-3.5 h-3.5" />
                             </Link>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
