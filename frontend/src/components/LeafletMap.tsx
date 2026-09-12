@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import { Donation } from '../types';
@@ -25,8 +25,28 @@ export const LeafletMap: React.FC<LeafletMapProps> = ({
   center = [12.9716, 77.5946], // Default center set to Bengaluru, India
   zoom = 12
 }) => {
+  const [mapType, setMapType] = useState<'m' | 's' | 'y'>('m'); // m = Roadmap, s = Satellite, y = Hybrid
+
   return (
     <div className="w-full h-full min-h-[400px] rounded-2xl overflow-hidden border border-slate-200 shadow-sm relative">
+      
+      {/* Google Maps Layer Controls */}
+      <div className="absolute top-3 right-3 z-[400] bg-white/90 backdrop-blur-md px-2.5 py-1.5 rounded-xl shadow-md border border-slate-200 flex items-center gap-1 text-[11px] font-bold">
+        <span className="text-slate-500 mr-1 text-[10px] uppercase tracking-wider">Google Maps:</span>
+        <button
+          onClick={() => setMapType('m')}
+          className={`px-2 py-0.5 rounded-md transition ${mapType === 'm' ? 'bg-emerald-600 text-white' : 'text-slate-700 hover:bg-slate-100'}`}
+        >
+          Map
+        </button>
+        <button
+          onClick={() => setMapType('y')}
+          className={`px-2 py-0.5 rounded-md transition ${mapType === 'y' ? 'bg-emerald-600 text-white' : 'text-slate-700 hover:bg-slate-100'}`}
+        >
+          Satellite
+        </button>
+      </div>
+
       <MapContainer
         center={center}
         zoom={zoom}
@@ -34,8 +54,11 @@ export const LeafletMap: React.FC<LeafletMapProps> = ({
         className="w-full h-full"
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          key={mapType}
+          attribution="&copy; Google Maps"
+          url={`https://{s}.google.com/vt/lyrs=${mapType}&x={x}&y={y}&z={z}`}
+          subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
+          maxZoom={20}
         />
         {donations.map((d) => (
           <Marker

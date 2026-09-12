@@ -15,7 +15,8 @@ import {
   ArrowLeft,
   Truck,
   HeartHandshake,
-  Phone
+  Phone,
+  Sparkles
 } from 'lucide-react';
 import { apiFetch } from '../services/api';
 import { Donation, FoodRequest, Delivery } from '../types';
@@ -25,6 +26,7 @@ import { ReportModal } from '../components/ReportModal';
 import { ReviewModal } from '../components/ReviewModal';
 import { ChatDrawer } from '../components/ChatDrawer';
 import { LeafletMap } from '../components/LeafletMap';
+import { LiveDeliveryTrackerModal } from '../components/LiveDeliveryTrackerModal';
 
 export const DonationDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -43,6 +45,7 @@ export const DonationDetailsPage: React.FC = () => {
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [chatDrawerOpen, setChatDrawerOpen] = useState(false);
+  const [liveTrackModalOpen, setLiveTrackModalOpen] = useState(false);
 
   const fetchDetails = async () => {
     if (!id) return;
@@ -395,38 +398,108 @@ export const DonationDetailsPage: React.FC = () => {
                 </button>
               )}
 
-              {/* Case 3: Donor Manages Requests */}
+              {/* Real-time GPS Delivery Tracking Button (Blinkit style) */}
+              {user && ['PICKUP_ASSIGNED', 'COLLECTED', 'DELIVERED'].includes(donation.status) && (
+                <button
+                  onClick={() => setLiveTrackModalOpen(true)}
+                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-sm shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-2 ring-2 ring-emerald-400/30 animate-pulse"
+                >
+                  <Truck className="w-5 h-5" />
+                  <span>Live Track Delivery Rider 🛵 (Real-Time GPS)</span>
+                </button>
+              )}
+
+              {/* Case 3: Donor Manages Requests with AI Matching */}
               {isDonor && donation.requests && donation.requests.length > 0 && (
                 <div className="space-y-3 border-t border-slate-100 pt-4">
-                  <h4 className="font-bold text-xs text-slate-800 uppercase tracking-wider">Incoming Recipient Requests</h4>
-                  {donation.requests.map((r) => (
-                    <div key={r.id} className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 text-xs">
-                      <div className="flex justify-between items-center">
-                        <span className="font-bold text-slate-900">{r.recipient?.name}</span>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">
-                          {r.status}
-                        </span>
-                      </div>
-                      <p className="text-slate-600 italic">"{r.message}"</p>
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-bold text-xs text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                      <Sparkles className="w-4 h-4 text-emerald-600 animate-pulse" />
+                      <span>Incoming Requests (AI Ranked)</span>
+                    </h4>
+                    <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                      Option F Match Engine
+                    </span>
+                  </div>
 
-                      {r.status === 'PENDING' && (
-                        <div className="flex gap-2 pt-1">
-                          <button
-                            onClick={() => handleRequestAction(r.id, 'ACCEPTED')}
-                            className="flex-1 py-1.5 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700"
+                  {donation.requests.map((r, idx) => {
+                    const matchScore = r.aiMatchScore || 85;
+                    const badgeText = r.badgeLabel || (matchScore >= 90 ? '⚡ Prime AI Match' : matchScore >= 75 ? '🔥 High Urgency Fit' : '📍 Nearby Match');
+                    
+                    return (
+                      <div
+                        key={r.id}
+                        className={`p-4.5 rounded-2xl border transition space-y-2.5 text-xs ${
+                          idx === 0 && r.status === 'PENDING'
+                            ? 'bg-gradient-to-r from-emerald-50/90 to-teal-50/90 border-emerald-300 shadow-sm ring-1 ring-emerald-400/30'
+                            : 'bg-slate-50/80 border-slate-200'
+                        }`}
+                      >
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-extrabold text-slate-900 text-sm">{r.recipient?.name}</span>
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-600 text-white shadow-xs">
+                                {matchScore}% AI Match
+                              </span>
+                            </div>
+                            <span className="text-[11px] text-slate-500 font-medium block mt-0.5">
+                              {badgeText} • {r.recipient?.city || 'Local Community'}
+                            </span>
+                          </div>
+
+                          <span
+                            className={`text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase ${
+                              r.status === 'ACCEPTED'
+                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                                : r.status === 'REJECTED'
+                                ? 'bg-rose-100 text-rose-800'
+                                : 'bg-amber-100 text-amber-800'
+                            }`}
                           >
-                            Accept Request
-                          </button>
-                          <button
-                            onClick={() => handleRequestAction(r.id, 'REJECTED')}
-                            className="flex-1 py-1.5 bg-rose-100 text-rose-700 font-bold rounded-lg hover:bg-rose-200"
-                          >
-                            Reject
-                          </button>
+                            {r.status}
+                          </span>
                         </div>
-                      )}
-                    </div>
-                  ))}
+
+                        <p className="text-slate-700 font-medium bg-white/70 p-2.5 rounded-xl border border-slate-100 text-xs italic">
+                          "{r.message}"
+                        </p>
+
+                        {/* AI Factors Breakdown */}
+                        {r.matchBreakdown && (
+                          <div className="flex flex-wrap gap-1.5 text-[10px] font-semibold text-slate-600 pt-1">
+                            <span className="px-2 py-0.5 bg-white border border-slate-200 rounded-md">
+                              📍 Distance: {r.matchBreakdown.distanceKm} km
+                            </span>
+                            <span className="px-2 py-0.5 bg-white border border-slate-200 rounded-md">
+                              ⏳ Expiry: {r.matchBreakdown.urgencyHoursLeft} hrs left
+                            </span>
+                            <span className="px-2 py-0.5 bg-white border border-slate-200 rounded-md text-emerald-700 font-bold">
+                              👥 Cap Fit: {r.matchBreakdown.capacityScore}/100
+                            </span>
+                          </div>
+                        )}
+
+                        {r.status === 'PENDING' && (
+                          <div className="flex gap-2 pt-2">
+                            <button
+                              onClick={() => handleRequestAction(r.id, 'ACCEPTED')}
+                              className="flex-1 py-2 bg-emerald-600 text-white font-extrabold text-xs rounded-xl hover:bg-emerald-700 shadow-sm transition flex items-center justify-center gap-1"
+                            >
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                              <span>Accept {idx === 0 ? '(Recommended)' : 'Request'}</span>
+                            </button>
+                            <button
+                              onClick={() => handleRequestAction(r.id, 'REJECTED')}
+                              className="px-4 py-2 bg-rose-50 text-rose-700 font-bold text-xs rounded-xl hover:bg-rose-100 transition"
+                            >
+                              Decline
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
 
@@ -518,6 +591,14 @@ export const DonationDetailsPage: React.FC = () => {
           receiverId={donation.donorId}
           receiverName={donation.donor?.name || 'Donor'}
           onClose={() => setChatDrawerOpen(false)}
+        />
+      )}
+
+      {liveTrackModalOpen && (
+        <LiveDeliveryTrackerModal
+          deliveryId={activeDelivery?.id || donation.deliveries?.[0]?.id || donation.id}
+          donationName={donation.foodName}
+          onClose={() => setLiveTrackModalOpen(false)}
         />
       )}
 

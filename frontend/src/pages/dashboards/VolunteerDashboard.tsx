@@ -4,12 +4,18 @@ import { apiFetch } from '../../services/api';
 import { Delivery } from '../../types';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
+import { LiveDeliveryTrackerModal } from '../../components/LiveDeliveryTrackerModal';
 
 export const VolunteerDashboard: React.FC = () => {
   const { user } = useAuth();
   const { showToast } = useToast();
   const [deliveries, setDeliveries] = useState<Delivery[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Live Tracking Modal State
+  const [trackerOpen, setTrackerOpen] = useState(false);
+  const [selectedDeliveryId, setSelectedDeliveryId] = useState<string | null>(null);
+  const [selectedDonationName, setSelectedDonationName] = useState<string | undefined>(undefined);
 
   const loadData = async () => {
     try {
@@ -128,20 +134,32 @@ export const VolunteerDashboard: React.FC = () => {
                 </div>
 
                 <div className="flex gap-2 pt-2">
+                  <button
+                    onClick={() => {
+                      setSelectedDeliveryId(d.id);
+                      setSelectedDonationName(d.donation?.foodName);
+                      setTrackerOpen(true);
+                    }}
+                    className="flex-1 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-sm flex items-center justify-center gap-1 text-[11px]"
+                  >
+                    <MapPin className="w-3.5 h-3.5" />
+                    <span>Live GPS Map</span>
+                  </button>
+
                   {d.status === 'ASSIGNED' && (
                     <button
                       onClick={() => handleUpdateStatus(d.id, 'COLLECTED')}
-                      className="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl shadow-sm"
+                      className="flex-1 py-2 bg-purple-700 hover:bg-purple-800 text-white font-bold rounded-xl shadow-sm text-[11px]"
                     >
-                      Mark Food as COLLECTED
+                      Mark COLLECTED
                     </button>
                   )}
                   {d.status === 'COLLECTED' && (
                     <button
                       onClick={() => handleUpdateStatus(d.id, 'DELIVERED')}
-                      className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-sm"
+                      className="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-sm text-[11px]"
                     >
-                      Mark Food as DELIVERED
+                      Mark DELIVERED
                     </button>
                   )}
                 </div>
@@ -187,6 +205,17 @@ export const VolunteerDashboard: React.FC = () => {
           </div>
         )}
       </div>
+
+      {trackerOpen && selectedDeliveryId && (
+        <LiveDeliveryTrackerModal
+          deliveryId={selectedDeliveryId}
+          donationName={selectedDonationName}
+          onClose={() => {
+            setTrackerOpen(false);
+            setSelectedDeliveryId(null);
+          }}
+        />
+      )}
 
     </div>
   );

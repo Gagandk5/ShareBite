@@ -73,6 +73,18 @@ export interface FoodRequest {
   message?: string | null;
   status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELLED';
   createdAt: string;
+  aiMatchScore?: number;
+  badgeLabel?: string;
+  badgeColor?: 'emerald' | 'amber' | 'blue' | 'purple';
+  matchBreakdown?: {
+    distanceKm: number;
+    distanceScore: number;
+    urgencyHoursLeft: number;
+    urgencyScore: number;
+    capacityScore: number;
+    needScore: number;
+    availabilityScore: number;
+  };
   recipient?: {
     id: string;
     name: string;
@@ -81,6 +93,7 @@ export interface FoodRequest {
     rating: number;
     verified: boolean;
     city?: string;
+    role?: string;
   };
   donation?: Donation;
 }

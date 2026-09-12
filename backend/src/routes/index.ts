@@ -11,12 +11,15 @@ import {
 import {
   createRequest,
   getRequests,
-  updateRequestStatus
+  updateRequestStatus,
+  getSmartMatchesForDonation
 } from '../controllers/requestController';
 import {
   getDeliveries,
   acceptDelivery,
-  updateDeliveryStatus
+  updateDeliveryStatus,
+  updateDeliveryLocation,
+  getDeliveryLiveTrack
 } from '../controllers/deliveryController';
 import {
   getNotifications,
@@ -62,6 +65,7 @@ router.patch('/donations/:id', authenticate, updateDonation);
 router.delete('/donations/:id', authenticate, deleteDonation);
 
 // --- Food Request Routes ---
+router.get('/donations/:id/smart-matches', authenticate, getSmartMatchesForDonation);
 router.post('/donations/:id/request', authenticate, createRequest);
 router.get('/requests', authenticate, getRequests);
 router.patch('/requests/:id', authenticate, updateRequestStatus);
@@ -70,6 +74,8 @@ router.patch('/requests/:id', authenticate, updateRequestStatus);
 router.get('/deliveries', authenticate, getDeliveries);
 router.post('/deliveries/:id/accept', authenticate, acceptDelivery);
 router.patch('/deliveries/:id/status', authenticate, updateDeliveryStatus);
+router.patch('/deliveries/:id/location', authenticate, updateDeliveryLocation);
+router.get('/deliveries/:id/live-track', authenticate, getDeliveryLiveTrack);
 
 // --- Notification Routes ---
 router.get('/notifications', authenticate, getNotifications);

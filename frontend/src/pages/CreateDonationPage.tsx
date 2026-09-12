@@ -29,10 +29,39 @@ export const CreateDonationPage: React.FC = () => {
   const [pickupEnd, setPickupEnd] = useState(new Date(Date.now() + 6 * 3600 * 1000).toISOString().slice(0, 16));
   const [address, setAddress] = useState('100 Feet Rd, Indiranagar');
   const [city, setCity] = useState('Bengaluru');
+  const [latitude, setLatitude] = useState<number>(12.9784);
+  const [longitude, setLongitude] = useState<number>(77.6408);
+  const [gettingLocation, setGettingLocation] = useState(false);
+  const [gpsActive, setGpsActive] = useState(false);
 
   // Step 4: Direct Photo Upload
   const [imageUrl, setImageUrl] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  const handleUseCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      showToast('Geolocation is not supported by your browser', 'error');
+      return;
+    }
+    setGettingLocation(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        setLatitude(lat);
+        setLongitude(lng);
+        setGpsActive(true);
+        setGettingLocation(false);
+        setAddress(`📍 Current Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`);
+        showToast('Current GPS coordinates captured successfully!', 'success');
+      },
+      (err) => {
+        setGettingLocation(false);
+        showToast('Could not fetch GPS position. Check browser permissions.', 'error');
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -79,8 +108,8 @@ export const CreateDonationPage: React.FC = () => {
           pickupEnd: new Date(pickupEnd).toISOString(),
           address,
           city,
-          latitude: 12.9784,
-          longitude: 77.6408,
+          latitude: Number(latitude),
+          longitude: Number(longitude),
           imageUrl
         })
       });
@@ -261,10 +290,25 @@ export const CreateDonationPage: React.FC = () => {
 
           {/* Section 3: Pickup Location & Slot */}
           <div className="space-y-4 pt-4 border-t border-slate-100">
-            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2 border-l-4 border-sky-500 pl-3">
-              <MapPin className="w-4 h-4 text-sky-600" />
-              3. Pickup Location & Availability Window
-            </h2>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-l-4 border-sky-500 pl-3">
+              <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-sky-600" />
+                3. Pickup Location & Availability Window
+              </h2>
+              <button
+                type="button"
+                onClick={handleUseCurrentLocation}
+                disabled={gettingLocation}
+                className={`px-3.5 py-2 rounded-xl text-xs font-extrabold shadow-sm transition flex items-center gap-1.5 ${
+                  gpsActive
+                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                    : 'bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white'
+                }`}
+              >
+                <MapPin className="w-3.5 h-3.5" />
+                <span>{gettingLocation ? 'Acquiring GPS...' : gpsActive ? '✓ GPS Captured' : '🎯 Share Current GPS Location'}</span>
+              </button>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>

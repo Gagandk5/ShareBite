@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { prisma } from '../config/prisma';
 import { AuthRequest } from '../middleware/auth';
+import { calculateAIMatchScore } from '../services/matchingService';
 
 export const createRequest = async (req: AuthRequest, res: Response) => {
   try {
@@ -92,7 +93,7 @@ export const getRequests = async (req: AuthRequest, res: Response) => {
         },
         include: {
           donation: true,
-          recipient: { select: { id: true, name: true, email: true, phone: true, rating: true, verified: true, city: true } }
+          recipient: { select: { id: true, name: true, email: true, phone: true, rating: true, verified: true, city: true, role: true } }
         },
         orderBy: { createdAt: 'desc' }
       });
@@ -115,7 +116,27 @@ export const getRequests = async (req: AuthRequest, res: Response) => {
       });
     }
 
-    res.json(requests);
+    // Attach AI Match Score for Donor / Admin views
+    const enrichedRequests = requests.map((reqItem: any) => {
+      if (reqItem.donation && reqItem.recipient) {
+        const matchResult = calculateAIMatchScore(reqItem.donation, reqItem.recipient);
+        return {
+          ...reqItem,
+          aiMatchScore: matchResult.aiMatchScore,
+          badgeLabel: matchResult.badgeLabel,
+          badgeColor: matchResult.badgeColor,
+          matchBreakdown: matchResult.breakdown
+        };
+      }
+      return reqItem;
+    });
+
+    // If Donor view, sort by AI Match Score descending for pending requests
+    if (req.user.role === 'DONOR') {
+      enrichedRequests.sort((a: any, b: any) => (b.aiMatchScore || 0) - (a.aiMatchScore || 0));
+    }
+
+    res.json(enrichedRequests);
   } catch (error: any) {
     res.status(500).json({ error: error.message || 'Failed to fetch requests' });
   }
@@ -220,5 +241,70 @@ export const updateRequestStatus = async (req: AuthRequest, res: Response) => {
     });
   } catch (error: any) {
     res.status(500).json({ error: error.message || 'Failed to update request status' });
+  }
+};
+
+export const getSmartMatchesForDonation = async (req: AuthRequest, res: Response) => {
+  try {
+    const { id: donationId } = req.params;
+
+    const donation = await prisma.donation.findUnique({
+      where: { id: donationId },
+      include: {
+        donor: true,
+        requests: {
+          include: {
+            recipient: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                phone: true,
+                rating: true,
+                verified: true,
+                city: true,
+                role: true,
+                latitude: true,
+                longitude: true
+              }
+            }
+          }
+        }
+      }
+    });
+
+    if (!donation) {
+      return res.status(404).json({ error: 'Donation not found' });
+    }
+
+    // Rank all pending requests for this donation using AI algorithm
+    const pendingRequests = (donation.requests || []).filter((r: any) => r.status === 'PENDING');
+
+    const matches = pendingRequests.map((reqItem: any) => {
+      const matchResult = calculateAIMatchScore(donation, reqItem.recipient);
+      return {
+        requestId: reqItem.id,
+        recipient: reqItem.recipient,
+        message: reqItem.message,
+        createdAt: reqItem.createdAt,
+        aiMatchScore: matchResult.aiMatchScore,
+        badgeLabel: matchResult.badgeLabel,
+        badgeColor: matchResult.badgeColor,
+        breakdown: matchResult.breakdown
+      };
+    });
+
+    // Sort descending by score
+    matches.sort((a: any, b: any) => b.aiMatchScore - a.aiMatchScore);
+
+    res.json({
+      donationId: donation.id,
+      foodName: donation.foodName,
+      totalPendingRequests: matches.length,
+      topRecommendedMatch: matches[0] || null,
+      matches
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || 'Failed to generate AI match recommendations' });
   }
 };
