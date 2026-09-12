@@ -68,6 +68,7 @@ router.delete('/donations/:id', authenticate, deleteDonation);
 router.get('/donations/:id/smart-matches', authenticate, getSmartMatchesForDonation);
 router.post('/donations/:id/request', authenticate, createRequest);
 router.get('/requests', authenticate, getRequests);
+router.get('/requests/me', authenticate, getRequests);
 router.patch('/requests/:id', authenticate, updateRequestStatus);
 
 // --- Delivery Routes ---
